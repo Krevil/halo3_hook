@@ -60,12 +60,6 @@ bool main_initialize(
 	DetourTransactionBegin();
 	DetourUpdateThread(GetCurrentThread());
 
-	if (!game_time_initialize())
-	{
-		MessageBox(nullptr, "Failed to initialize game time!", "Error", MB_OK | MB_ICONERROR);
-		return false;
-	}
-
 	lightmap_interpolation_sub_180470630 = reinterpret_cast<decltype(lightmap_interpolation_sub_180470630)>(
 		reinterpret_cast<size_t>(g_main_globals.module_address) + 0x470630);
 
@@ -91,8 +85,6 @@ void main_dispose(
 	{
 		return;
 	}
-
-	game_time_dispose();
 
 	FreeLibrary(reinterpret_cast<HMODULE>(g_main_globals.module_address));
 
