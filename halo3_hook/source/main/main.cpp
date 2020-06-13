@@ -12,52 +12,48 @@ main.cpp
 #include <Windows.h>
 #include <detours.h>
 
-/* ---------- public globals */
+/* ---------- globals */
 
-s_main_globals g_main_globals = { nullptr };
+s_main_globals g_main_globals
+{
+	.initialized = false,
+	.base_address = nullptr,
+	.module_address = nullptr
+};
 
-/* ---------- private globals */
-
-extern "C" IMAGE_DOS_HEADER __ImageBase;
-
-static char g_dll_path[MAX_PATH];
-
-/* ---------- private code */
+/* ---------- prototypes */
 
 static long long(__fastcall *lightmap_interpolation_sub_180470630)(float *, float *, float, bool) = nullptr;
-
-long long __fastcall lightmap_interpolation_sub_180470630_hook(
-	float *a1,
-	float *a2,
-	float a3,
-	bool a4)
-{
-	long long ticks_per_second = game_seconds_to_ticks_round(1.0f);
-
-	return lightmap_interpolation_sub_180470630(a1, a2, a3 / (float)((double)ticks_per_second / 30.0), true);
-}
+long long __fastcall lightmap_interpolation_sub_180470630_hook(float *, float *, float, bool);
 
 /* ---------- public code */
 
 bool main_initialize(
-	void)
+	void *base_address)
 {
-	memset(g_dll_path, 0, sizeof(g_dll_path));
-	GetModuleFileName(reinterpret_cast<HINSTANCE>(&__ImageBase), g_dll_path, sizeof(g_dll_path));
+	if (g_main_globals.initialized)
+	{
+		return true;
+	}
 
-	size_t dll_path_length = strnlen_s(g_dll_path, sizeof(g_dll_path));
+	static char dll_path[MAX_PATH];
+	memset(dll_path, 0, sizeof(dll_path));
+
+	GetModuleFileName(reinterpret_cast<HINSTANCE>(base_address), dll_path, sizeof(dll_path));
+
+	size_t dll_path_length = strnlen_s(dll_path, sizeof(dll_path));
 
 	if (dll_path_length > (MAX_PATH - 10))
 	{
-		MessageBox(nullptr, "File path for halo3_original.dll is too long!", "Error", MB_OK | MB_ICONERROR);
+		MessageBox(nullptr, "File path for original module is too long!", "Error", MB_OK | MB_ICONERROR);
 		return false;
 	}
 
-	memcpy_s(strstr(g_dll_path, ".dll"), 14, "_original.dll", 13);
+	memcpy_s(strstr(dll_path, ".dll"), 14, "_original.dll", 13);
 
-	if (!(g_main_globals.module_address = LoadLibrary(g_dll_path)))
+	if (!(g_main_globals.module_address = LoadLibrary(dll_path)))
 	{
-		MessageBox(nullptr, "Failed to load halo3_original.dll!", "Error", MB_OK | MB_ICONERROR);
+		MessageBox(nullptr, "Failed to load original module!", "Error", MB_OK | MB_ICONERROR);
 		return false;
 	}
 
@@ -73,13 +69,17 @@ bool main_initialize(
 	lightmap_interpolation_sub_180470630 = reinterpret_cast<decltype(lightmap_interpolation_sub_180470630)>(
 		reinterpret_cast<size_t>(g_main_globals.module_address) + 0x470630);
 
-	DetourAttach(reinterpret_cast<void **>(&lightmap_interpolation_sub_180470630), lightmap_interpolation_sub_180470630_hook);
+	DetourAttach(
+		reinterpret_cast<PVOID *>(&lightmap_interpolation_sub_180470630),
+		lightmap_interpolation_sub_180470630_hook);
 
 	if (DetourTransactionCommit() != NO_ERROR)
 	{
-		MessageBox(nullptr, "Failed to detour functions in halo3_original.dll!", "Error", MB_OK | MB_ICONERROR);
+		MessageBox(nullptr, "Failed to detour functions in original module!", "Error", MB_OK | MB_ICONERROR);
 		return false;
 	}
+
+	g_main_globals.initialized = true;
 
 	return true;
 }
@@ -87,9 +87,16 @@ bool main_initialize(
 void main_dispose(
 	void)
 {
+	if (!g_main_globals.initialized)
+	{
+		return;
+	}
+
 	game_time_dispose();
 
 	FreeLibrary(reinterpret_cast<HMODULE>(g_main_globals.module_address));
+
+	g_main_globals.initialized = false;
 }
 
 BOOL WINAPI DllMain(
@@ -97,10 +104,11 @@ BOOL WINAPI DllMain(
 	DWORD reason,
 	LPVOID)
 {
+
 	switch (reason)
 	{
 	case DLL_PROCESS_ATTACH:
-		if (!main_initialize())
+		if (!main_initialize(reinterpret_cast<void *>(instance)))
 			return FALSE;
 		break;
 
@@ -110,6 +118,19 @@ BOOL WINAPI DllMain(
 	}
 
 	return TRUE;
+}
+
+/* ---------- private code */
+
+long long __fastcall lightmap_interpolation_sub_180470630_hook(
+	float *a1,
+	float *a2,
+	float a3,
+	bool a4)
+{
+	long long ticks_per_second = game_seconds_to_ticks_round(1.0f);
+
+	return lightmap_interpolation_sub_180470630(a1, a2, a3 / (float)((double)ticks_per_second / 30.0), a4);
 }
 
 /* ---------- wrapper code */
@@ -128,7 +149,7 @@ extern "C" long long __stdcall CreateDataAccess(
 
 		if (!CreateDataAccess_original)
 		{
-			MessageBox(nullptr, "Failed to load CreateDataAccess from halo3_original.dll!", "Error", MB_OK | MB_ICONERROR);
+			MessageBox(nullptr, "Failed to load CreateDataAccess from original module!", "Error", MB_OK | MB_ICONERROR);
 			return 0;
 		}
 	}
@@ -150,7 +171,7 @@ extern "C" long long __stdcall CreateGameEngine(
 
 		if (!CreateGameEngine_original)
 		{
-			MessageBox(nullptr, "Failed to load CreateGameEngine from halo3_original.dll!", "Error", MB_OK | MB_ICONERROR);
+			MessageBox(nullptr, "Failed to load CreateGameEngine from original module!", "Error", MB_OK | MB_ICONERROR);
 			return 0;
 		}
 	}
@@ -172,7 +193,7 @@ extern "C" long long __stdcall SetLibrarySettings(
 
 		if (!SetLibrarySettings_original)
 		{
-			MessageBox(nullptr, "Failed to load SetLibrarySettings from halo3_original.dll!", "Error", MB_OK | MB_ICONERROR);
+			MessageBox(nullptr, "Failed to load SetLibrarySettings from original module!", "Error", MB_OK | MB_ICONERROR);
 			return 0;
 		}
 	}
