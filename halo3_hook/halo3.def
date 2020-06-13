@@ -1,0 +1,5 @@
+LIBRARY halo3
+EXPORTS
+	CreateDataAccess @1
+	CreateGameEngine @2
+	SetLibrarySettings @3
