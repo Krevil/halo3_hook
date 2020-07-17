@@ -40,3 +40,7 @@ struct s_data_iterator
     long index;
     long absolute_index;
 };
+
+/* ---------- prototypes/data.cpp */
+
+long long __fastcall data_next_index(s_data_array *data, short index);

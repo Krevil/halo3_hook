@@ -15,6 +15,7 @@ main.cpp
 
 #include <objects/light_hooks.h>
 #include <objects/object_hooks.h>
+#include <effects/screen_effect_hooks.h>
 #include <physics/havok_component_hooks.h>
 
 /* ---------- structures */
@@ -83,9 +84,9 @@ void *main_get_tls_address()
 {
 	assert(main_initialized());
 
-	long tls_index = *main_get_module_offset<long *>(0x9F119C);
+	long long tls_index = *main_get_module_offset<long *>(0x9F219C);
 
-	return ((void **)NtCurrentTeb()->Reserved1[11])[tls_index];
+	return *(void **)(__readgsqword(0x58u) + (8 * tls_index));
 }
 
 /* ---------- private code */
@@ -130,6 +131,7 @@ static bool main_initialize_detours()
 
 	light_hooks_initialize();
 	object_hooks_initialize();
+	screen_effect_hooks_initialize();
 	havok_component_hooks_initialize();
 
 	return DetourTransactionCommit() == NO_ERROR;
@@ -141,6 +143,7 @@ void main_dispose_detours()
 	DetourUpdateThread(GetCurrentThread());
 
 	havok_component_hooks_dispose();
+	screen_effect_hooks_dispose();
 	object_hooks_dispose();
 	light_hooks_dispose();
 

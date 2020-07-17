@@ -12,10 +12,10 @@
 static void __fastcall light_update_state__hook(long light_index);
 static decltype(light_update_state__hook) *light_update_state = nullptr;
 
-long long __fastcall c_function_definition__evaluate_color__hook(void *function, double input, double range, float *out_color);
+static long long __fastcall c_function_definition__evaluate_color__hook(void *function, double input, double range, float *out_color);
 static decltype(c_function_definition__evaluate_color__hook) *c_function_definition__evaluate_color = nullptr;
 
-double __fastcall c_function_definition__evaluate_scalar__hook(void *function, double input, double range);
+static double __fastcall c_function_definition__evaluate_scalar__hook(void *function, double input, double range);
 static decltype(c_function_definition__evaluate_scalar__hook) *c_function_definition__evaluate_scalar = nullptr;
 
 /* ---------- public code */
@@ -45,7 +45,7 @@ static long g_updating_light_state_index = -1;
 
 /* ---------- private code */
 
-long long __fastcall c_function_definition__evaluate_color__hook(void *function, double input, double range, float *out_color)
+static long long __fastcall c_function_definition__evaluate_color__hook(void *function, double input, double range, float *out_color)
 {
 	auto result = c_function_definition__evaluate_color(function, input, range, out_color);
 
@@ -59,12 +59,12 @@ long long __fastcall c_function_definition__evaluate_color__hook(void *function,
 	return result;
 }
 
-double __fastcall c_function_definition__evaluate_scalar__hook(void *function, double input, double range)
+static double __fastcall c_function_definition__evaluate_scalar__hook(void *function, double input, double range)
 {
 	return c_function_definition__evaluate_scalar(function, input, range);
 }
 
-void __fastcall light_update_state__hook(long light_index)
+static void __fastcall light_update_state__hook(long light_index)
 {
 	g_is_updating_light_state = true;
 	g_updating_light_state_index = light_index;

@@ -109,14 +109,20 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="source\cache\cache_file_tag_access.cpp" />
+    <ClCompile Include="source\effects\screen_effect_hooks.cpp" />
     <ClCompile Include="source\main\main.cpp" />
+    <ClCompile Include="source\math\color_math.cpp" />
+    <ClCompile Include="source\memory\data.cpp" />
     <ClCompile Include="source\objects\light_hooks.cpp" />
     <ClCompile Include="source\objects\object_hooks.cpp" />
     <ClCompile Include="source\physics\havok_component_hooks.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="source\cache\cache_file_tag_access.h" />
+    <ClInclude Include="source\effects\screen_effect_hooks.h" />
     <ClInclude Include="source\main\main.h" />
+    <ClInclude Include="source\math\color_math.h" />
+    <ClInclude Include="source\math\real_math.h" />
     <ClInclude Include="source\memory\data.h" />
     <ClInclude Include="source\objects\light_hooks.h" />
     <ClInclude Include="source\objects\object_hooks.h" />

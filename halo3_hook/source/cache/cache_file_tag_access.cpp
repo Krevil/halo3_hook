@@ -10,7 +10,10 @@ void *tag_get(
     s_cache_file_tag_instance *global_tag_instances = *main_get_module_offset<s_cache_file_tag_instance **>(0xCB3700);
     const long long k_virtual_to_physical_base_offset = *main_get_module_offset<const long long *>(0xCFEEB8);
     
-    unsigned long base_address = global_tag_instances[index].base_address;
+    long absolute_index = index & 0xFFFF;
+    long identifier = index >> 16;
+
+    unsigned long base_address = global_tag_instances[absolute_index].base_address;
 
     if (base_address)
     {

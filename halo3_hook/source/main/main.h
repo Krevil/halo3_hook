@@ -20,11 +20,13 @@ void *main_get_tls_address();
 template <typename t_type>
 inline t_type main_get_module_offset(unsigned long long offset = 0)
 {
-	return (t_type)((char *)main_get_module_address() + offset);
+	auto address = main_get_module_address();
+	return (t_type)((char *)address + offset);
 }
 
 template <typename t_type>
 inline t_type main_get_tls_offset(unsigned long long offset = 0)
 {
-	return (t_type)((char *)main_get_tls_address() + offset);
+	auto address = main_get_tls_address();
+	return (t_type)((char *)address + offset);
 }

@@ -9,7 +9,7 @@
 
 /* ---------- prototypes */
 
-bool __fastcall c_havok_contact_point__is_climbable_surface(void *contact_point);
+static bool __fastcall c_havok_contact_point__is_climbable_surface(void *contact_point);
 static decltype(c_havok_contact_point__is_climbable_surface) *c_havok_contact_point__is_climbable_surface__original = nullptr;
 
 /* ---------- public code */
@@ -28,7 +28,7 @@ void havok_component_hooks_dispose()
 
 /* ---------- private code */
 
-bool __fastcall c_havok_contact_point__is_climbable_surface(void *contact_point)
+static bool __fastcall c_havok_contact_point__is_climbable_surface(void *contact_point)
 {
 	long contact_point_object_index = *(long *)((char *)contact_point + 0x14);
 	unsigned char surface_flags = *(unsigned char *)((char *)contact_point + 0x40);
