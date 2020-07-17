@@ -3,18 +3,32 @@ main.cpp
 	the entry-point for the DLL wrapper
 */
 
-#include <game/game_time.h>
-#include <main/main.h>
-
+#include <assert.h>
 #include <stddef.h>
 
 #define WIN32_LEAN_AND_MEAN
 #include <Windows.h>
+#include <winternl.h>
 #include <detours.h>
+
+#include <main/main.h>
+
+#include <objects/light_hooks.h>
+#include <objects/object_hooks.h>
+#include <physics/havok_component_hooks.h>
+
+/* ---------- structures */
+
+struct s_main_globals
+{
+	bool initialized;
+	void *base_address;
+	void *module_address;
+};
 
 /* ---------- globals */
 
-s_main_globals g_main_globals
+static s_main_globals main_globals
 {
 	.initialized = false,
 	.base_address = nullptr,
@@ -23,15 +37,62 @@ s_main_globals g_main_globals
 
 /* ---------- prototypes */
 
-static long long(__fastcall *lightmap_interpolation_sub_180470630)(float *, float *, float, bool) = nullptr;
-long long __fastcall lightmap_interpolation_sub_180470630_hook(float *, float *, float, bool);
+static bool main_initialize_globals(void *base_address);
+
+static bool main_initialize_detours();
+static void main_dispose_detours();
 
 /* ---------- public code */
 
-bool main_initialize(
-	void *base_address)
+bool main_initialize(void *base_address)
 {
-	if (g_main_globals.initialized)
+	return main_initialize_globals(base_address)
+		&& main_initialize_detours();
+}
+
+void main_dispose()
+{
+	if (!main_globals.initialized)
+	{
+		return;
+	}
+
+	FreeLibrary(reinterpret_cast<HMODULE>(main_globals.module_address));
+
+	main_globals.initialized = false;
+}
+
+bool main_initialized()
+{
+	return main_globals.initialized;
+}
+
+void *main_get_base_address()
+{
+	assert(main_initialized());
+	return main_globals.base_address;
+}
+
+void *main_get_module_address()
+{
+	assert(main_initialized());
+	return main_globals.module_address;
+}
+
+void *main_get_tls_address()
+{
+	assert(main_initialized());
+
+	long tls_index = *main_get_module_offset<long *>(0x9F119C);
+
+	return ((void **)NtCurrentTeb()->Reserved1[11])[tls_index];
+}
+
+/* ---------- private code */
+
+static bool main_initialize_globals(void *base_address)
+{
+	if (main_initialized())
 	{
 		return true;
 	}
@@ -51,50 +112,44 @@ bool main_initialize(
 
 	memcpy_s(strstr(dll_path, ".dll"), 14, "_original.dll", 13);
 
-	if (!(g_main_globals.module_address = LoadLibrary(dll_path)))
+	if (!(main_globals.module_address = LoadLibrary(dll_path)))
 	{
 		MessageBox(nullptr, "Failed to load original module!", "Error", MB_OK | MB_ICONERROR);
 		return false;
 	}
 
-	DetourTransactionBegin();
-	DetourUpdateThread(GetCurrentThread());
-
-	lightmap_interpolation_sub_180470630 = reinterpret_cast<decltype(lightmap_interpolation_sub_180470630)>(
-		reinterpret_cast<size_t>(g_main_globals.module_address) + 0x470630);
-
-	DetourAttach(
-		reinterpret_cast<PVOID *>(&lightmap_interpolation_sub_180470630),
-		lightmap_interpolation_sub_180470630_hook);
-
-	if (DetourTransactionCommit() != NO_ERROR)
-	{
-		MessageBox(nullptr, "Failed to detour functions in original module!", "Error", MB_OK | MB_ICONERROR);
-		return false;
-	}
-
-	g_main_globals.initialized = true;
+	main_globals.initialized = true;
 
 	return true;
 }
 
-void main_dispose(
-	void)
+static bool main_initialize_detours()
 {
-	if (!g_main_globals.initialized)
-	{
-		return;
-	}
+	DetourTransactionBegin();
+	DetourUpdateThread(GetCurrentThread());
 
-	FreeLibrary(reinterpret_cast<HMODULE>(g_main_globals.module_address));
+	light_hooks_initialize();
+	object_hooks_initialize();
+	havok_component_hooks_initialize();
 
-	g_main_globals.initialized = false;
+	return DetourTransactionCommit() == NO_ERROR;
 }
 
-BOOL WINAPI DllMain(
-	HINSTANCE instance,
-	DWORD reason,
-	LPVOID)
+void main_dispose_detours()
+{
+	DetourTransactionBegin();
+	DetourUpdateThread(GetCurrentThread());
+
+	havok_component_hooks_dispose();
+	object_hooks_dispose();
+	light_hooks_dispose();
+
+	DetourTransactionCommit();
+}
+
+/* ---------- wrapper code */
+
+BOOL WINAPI DllMain(HINSTANCE instance, DWORD reason, LPVOID)
 {
 
 	switch (reason)
@@ -112,32 +167,13 @@ BOOL WINAPI DllMain(
 	return TRUE;
 }
 
-/* ---------- private code */
-
-long long __fastcall lightmap_interpolation_sub_180470630_hook(
-	float *a1,
-	float *a2,
-	float a3,
-	bool a4)
-{
-	long long ticks_per_second = game_seconds_to_ticks_round(1.0f);
-
-	return lightmap_interpolation_sub_180470630(a1, a2, a3 / (float)((double)ticks_per_second / 30.0), a4);
-}
-
-/* ---------- wrapper code */
-
-extern "C" long long __stdcall CreateDataAccess(
-	void *address)
+extern "C" long long __stdcall CreateDataAccess(void *address)
 {
 	static decltype(CreateDataAccess) *CreateDataAccess_original = nullptr;
 
 	if (!CreateDataAccess_original)
 	{
-		CreateDataAccess_original = reinterpret_cast<decltype(CreateDataAccess) *>(
-			GetProcAddress(
-				reinterpret_cast<HMODULE>(g_main_globals.module_address),
-				"CreateDataAccess"));
+		CreateDataAccess_original = (decltype(&CreateDataAccess))GetProcAddress((HMODULE)main_globals.module_address, "CreateDataAccess");
 
 		if (!CreateDataAccess_original)
 		{
@@ -149,17 +185,13 @@ extern "C" long long __stdcall CreateDataAccess(
 	return CreateDataAccess_original(address);
 }
 
-extern "C" long long __stdcall CreateGameEngine(
-	void *address)
+extern "C" long long __stdcall CreateGameEngine(void *address)
 {
 	static decltype(CreateGameEngine) *CreateGameEngine_original = nullptr;
 
 	if (!CreateGameEngine_original)
 	{
-		CreateGameEngine_original = reinterpret_cast<decltype(CreateGameEngine) *>(
-			GetProcAddress(
-				reinterpret_cast<HMODULE>(g_main_globals.module_address),
-				"CreateGameEngine"));
+		CreateGameEngine_original = (decltype(&CreateGameEngine))GetProcAddress((HMODULE)main_globals.module_address, "CreateGameEngine");
 
 		if (!CreateGameEngine_original)
 		{
@@ -171,17 +203,13 @@ extern "C" long long __stdcall CreateGameEngine(
 	return CreateGameEngine_original(address);
 }
 
-extern "C" long long __stdcall SetLibrarySettings(
-	void *address)
+extern "C" long long __stdcall SetLibrarySettings(void *address)
 {
 	static decltype(SetLibrarySettings) *SetLibrarySettings_original = nullptr;
 
 	if (!SetLibrarySettings_original)
 	{
-		SetLibrarySettings_original = reinterpret_cast<decltype(SetLibrarySettings) *>(
-			GetProcAddress(
-				reinterpret_cast<HMODULE>(g_main_globals.module_address),
-				"SetLibrarySettings"));
+		SetLibrarySettings_original = (decltype(&SetLibrarySettings))GetProcAddress((HMODULE)main_globals.module_address, "SetLibrarySettings");
 
 		if (!SetLibrarySettings_original)
 		{

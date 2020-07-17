@@ -5,20 +5,26 @@ main.h
 
 #pragma once
 
-/* ---------- structures */
-
-struct s_main_globals
-{
-	bool initialized;
-	void *base_address;
-	void *module_address;
-};
-
-/* ---------- globals */
-
-extern s_main_globals g_main_globals;
-
-/* ---------- prototypes */
+/* ---------- prototypes/main.cpp */
 
 bool main_initialize(void *base_address);
-void main_dispose(void);
+void main_dispose();
+
+bool main_initialized();
+void *main_get_base_address();
+void *main_get_module_address();
+void *main_get_tls_address();
+
+/* ---------- inline code */
+
+template <typename t_type>
+inline t_type main_get_module_offset(unsigned long long offset = 0)
+{
+	return (t_type)((char *)main_get_module_address() + offset);
+}
+
+template <typename t_type>
+inline t_type main_get_tls_offset(unsigned long long offset = 0)
+{
+	return (t_type)((char *)main_get_tls_address() + offset);
+}
