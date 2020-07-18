@@ -8,7 +8,7 @@
 
 /* ---------- globals */
 
-static bool g_kill_triggers_enabled = false;
+static bool g_kill_triggers_enabled = true;
 
 /* ---------- prototypes */
 
@@ -27,6 +27,16 @@ void scenario_kill_trigger_volume_hooks_initialize()
 void scenario_kill_trigger_volume_hooks_dispose()
 {
 	DetourDetach((PVOID *)&scenario_kill_trigger_volume_test_object__original, scenario_kill_trigger_volume_test_object);
+}
+
+bool scenario_kill_triggers_enabled()
+{
+	return g_kill_triggers_enabled;
+}
+
+void scenario_set_kill_triggers_enabled(bool value)
+{
+	g_kill_triggers_enabled = value;
 }
 
 /* ---------- private code */

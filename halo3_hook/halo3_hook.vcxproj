@@ -110,6 +110,8 @@
   <ItemGroup>
     <ClCompile Include="source\cache\cache_file_tag_access.cpp" />
     <ClCompile Include="source\effects\screen_effects.cpp" />
+    <ClCompile Include="source\game\game.cpp" />
+    <ClCompile Include="source\input\input.cpp" />
     <ClCompile Include="source\main\main.cpp" />
     <ClCompile Include="source\math\color_math.cpp" />
     <ClCompile Include="source\memory\data.cpp" />
@@ -121,6 +123,8 @@
   <ItemGroup>
     <ClInclude Include="source\cache\cache_file_tag_access.h" />
     <ClInclude Include="source\effects\screen_effects.h" />
+    <ClInclude Include="source\game\game.h" />
+    <ClInclude Include="source\input\input.h" />
     <ClInclude Include="source\main\main.h" />
     <ClInclude Include="source\math\color_math.h" />
     <ClInclude Include="source\math\real_math.h" />

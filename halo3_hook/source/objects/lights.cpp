@@ -5,14 +5,20 @@
 #include <detours.h>
 
 #include <main/main.h>
+#include <math/color_math.h>
 #include <objects/lights.h>
+
+/* ---------- globals */
+
+static bool g_forced_color_enabled = false;
+static real_rgb_color g_forced_color = { 0.0f, 1.0f, 0.0f };
 
 /* ---------- prototypes */
 
 static void __fastcall light_update_state__hook(long light_index);
 static decltype(light_update_state__hook) *light_update_state = nullptr;
 
-static __int64 __fastcall c_function_definition__evaluate_color__hook(void *function, double input, double range, float *out_color);
+static __int64 __fastcall c_function_definition__evaluate_color__hook(void *function, double input, double range, real_rgb_color *out_color);
 static decltype(c_function_definition__evaluate_color__hook) *c_function_definition__evaluate_color = nullptr;
 
 static double __fastcall c_function_definition__evaluate_scalar__hook(void *function, double input, double range);
@@ -38,6 +44,15 @@ void light_hooks_dispose()
 	DetourDetach((PVOID *)&c_function_definition__evaluate_color, c_function_definition__evaluate_color__hook);
 }
 
+void lights_set_forced_color(bool enabled, float red, float green, float blue)
+{
+	g_forced_color_enabled = enabled;
+
+	g_forced_color.red = red;
+	g_forced_color.green = green;
+	g_forced_color.blue = blue;
+}
+
 /* ---------- private globals */
 
 static bool g_is_updating_light_state = false;
@@ -45,15 +60,13 @@ static long g_updating_light_state_index = -1;
 
 /* ---------- private code */
 
-static __int64 __fastcall c_function_definition__evaluate_color__hook(void *function, double input, double range, float *out_color)
+static __int64 __fastcall c_function_definition__evaluate_color__hook(void *function, double input, double range, real_rgb_color *out_color)
 {
 	auto result = c_function_definition__evaluate_color(function, input, range, out_color);
 
-	if (g_is_updating_light_state && out_color)
+	if (g_is_updating_light_state && g_forced_color_enabled && out_color)
 	{
-		out_color[0] = 0.0;
-		out_color[1] = 1.0;
-		out_color[2] = 0.0;
+		memcpy(out_color, &g_forced_color, sizeof(real_rgb_color));
 	}
 
 	return result;

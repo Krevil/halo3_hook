@@ -2,6 +2,13 @@
 
 /* ---------- structures */
 
+struct real_rgb_color
+{
+	float red;
+	float green;
+	float blue;
+};
+
 struct real_linear_rgb_color
 {
 	float red;

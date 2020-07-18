@@ -13,6 +13,7 @@ main.cpp
 
 #include <main/main.h>
 
+#include <game/game.h>
 #include <objects/lights.h>
 #include <objects/objects.h>
 #include <effects/screen_effects.h>
@@ -58,6 +59,8 @@ void main_dispose()
 	{
 		return;
 	}
+
+	main_dispose_detours();
 
 	FreeLibrary(reinterpret_cast<HMODULE>(main_globals.module_address));
 
@@ -130,6 +133,7 @@ static bool main_initialize_detours()
 	DetourTransactionBegin();
 	DetourUpdateThread(GetCurrentThread());
 
+	game_hooks_initialize();
 	light_hooks_initialize();
 	object_hooks_initialize();
 	screen_effect_hooks_initialize();
@@ -149,6 +153,7 @@ void main_dispose_detours()
 	screen_effect_hooks_dispose();
 	object_hooks_dispose();
 	light_hooks_dispose();
+	game_hooks_dispose();
 
 	DetourTransactionCommit();
 }
