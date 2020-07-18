@@ -118,6 +118,7 @@
     <ClCompile Include="source\objects\lights.cpp" />
     <ClCompile Include="source\objects\objects.cpp" />
     <ClCompile Include="source\physics\havok_component.cpp" />
+    <ClCompile Include="source\scenario\scenario.cpp" />
     <ClCompile Include="source\scenario\scenario_kill_trigger_volumes.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -132,6 +133,7 @@
     <ClInclude Include="source\objects\lights.h" />
     <ClInclude Include="source\objects\objects.h" />
     <ClInclude Include="source\physics\havok_component.h" />
+    <ClInclude Include="source\scenario\scenario.h" />
     <ClInclude Include="source\scenario\scenario_kill_trigger_volumes.h" />
   </ItemGroup>
   <ItemGroup>
