@@ -18,6 +18,7 @@ main.cpp
 #include <objects/objects.h>
 #include <effects/screen_effects.h>
 #include <physics/havok_component.h>
+#include <scenario/scenario.h>
 #include <scenario/scenario_kill_trigger_volumes.h>
 
 /* ---------- structures */
@@ -138,6 +139,7 @@ static bool main_initialize_detours()
 	object_hooks_initialize();
 	screen_effect_hooks_initialize();
 	havok_component_hooks_initialize();
+	scenario_hooks_initialize();
 	scenario_kill_trigger_volume_hooks_initialize();
 
 	return DetourTransactionCommit() == NO_ERROR;
@@ -149,6 +151,7 @@ void main_dispose_detours()
 	DetourUpdateThread(GetCurrentThread());
 
 	scenario_kill_trigger_volume_hooks_dispose();
+	scenario_hooks_dispose();
 	havok_component_hooks_dispose();
 	screen_effect_hooks_dispose();
 	object_hooks_dispose();

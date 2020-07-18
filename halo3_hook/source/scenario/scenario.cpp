@@ -27,6 +27,7 @@ void scenario_hooks_initialize()
 
 void scenario_hooks_dispose()
 {
+	DetourDetach((PVOID *)&scenario_position_inside_safe_zone__original, scenario_position_inside_safe_zone);
 }
 
 bool scenario_safe_zones_enabled()
