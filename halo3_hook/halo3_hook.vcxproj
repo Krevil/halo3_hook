@@ -120,6 +120,7 @@
     <ClCompile Include="source\physics\havok_component.cpp" />
     <ClCompile Include="source\scenario\scenario.cpp" />
     <ClCompile Include="source\scenario\scenario_kill_trigger_volumes.cpp" />
+    <ClCompile Include="source\scenario\scenario_soft_ceilings.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="source\cache\cache_file_tag_access.h" />
@@ -135,6 +136,7 @@
     <ClInclude Include="source\physics\havok_component.h" />
     <ClInclude Include="source\scenario\scenario.h" />
     <ClInclude Include="source\scenario\scenario_kill_trigger_volumes.h" />
+    <ClInclude Include="source\scenario\scenario_soft_ceilings.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="halo3.def" />

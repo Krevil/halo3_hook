@@ -33,11 +33,11 @@ bool input_update()
 {
 	if (GetKeyState(VK_NUMPAD1) < 0)
 	{
-		scenario_set_kill_triggers_enabled(true);
+		scenario_kill_triggers_set_enabled(true);
 	}
 	else if (GetKeyState(VK_NUMPAD2) < 0)
 	{
-		scenario_set_kill_triggers_enabled(false);
+		scenario_kill_triggers_set_enabled(false);
 	}
 	else if (GetKeyState(VK_NUMPAD4) < 0)
 	{

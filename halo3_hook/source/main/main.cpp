@@ -20,6 +20,7 @@ main.cpp
 #include <physics/havok_component.h>
 #include <scenario/scenario.h>
 #include <scenario/scenario_kill_trigger_volumes.h>
+#include <scenario/scenario_soft_ceilings.h>
 
 /* ---------- structures */
 
@@ -141,6 +142,7 @@ static bool main_initialize_detours()
 	havok_component_hooks_initialize();
 	scenario_hooks_initialize();
 	scenario_kill_trigger_volume_hooks_initialize();
+	scenario_soft_ceiling_hooks_initialize();
 
 	return DetourTransactionCommit() == NO_ERROR;
 }
@@ -150,6 +152,7 @@ void main_dispose_detours()
 	DetourTransactionBegin();
 	DetourUpdateThread(GetCurrentThread());
 
+	scenario_soft_ceiling_hooks_dispose();
 	scenario_kill_trigger_volume_hooks_dispose();
 	scenario_hooks_dispose();
 	havok_component_hooks_dispose();
