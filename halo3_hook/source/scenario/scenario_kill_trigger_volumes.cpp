@@ -35,6 +35,11 @@ static __int64 __fastcall scenario_kill_trigger_volume_test_object(__int64 objec
 {
 	if (!g_kill_triggers_enabled)
 	{
+		if (safe_position)
+		{
+			*safe_position = true;
+		}
+
 		return false;
 	}
 
