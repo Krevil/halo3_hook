@@ -1,5 +1,6 @@
-#include <cache/cache_file_tag_access.h>
+
 #include <main/main.h>
+#include <cache/cache_file_tag_access.h>
 
 /* ---------- code */
 
@@ -8,7 +9,7 @@ void *tag_get(
     long index)
 {
     s_cache_file_tag_instance *global_tag_instances = *main_get_module_offset<s_cache_file_tag_instance **>(0xCB3700);
-    const long long k_virtual_to_physical_base_offset = *main_get_module_offset<const long long *>(0xCFEEB8);
+    const __int64 k_virtual_to_physical_base_offset = *main_get_module_offset<const __int64 *>(0xCFEEB8);
     
     long absolute_index = index & 0xFFFF;
     long identifier = index >> 16;
@@ -23,7 +24,7 @@ void *tag_get(
         }
         else
         {
-            return (void *)(k_virtual_to_physical_base_offset + ((unsigned long long)base_address * 4));
+            return (void *)(k_virtual_to_physical_base_offset + ((unsigned __int64)base_address * 4));
         }
     }
 

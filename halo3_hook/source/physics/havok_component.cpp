@@ -4,8 +4,8 @@
 #include <detours.h>
 
 #include <main/main.h>
-#include <objects/object_hooks.h>
-#include <physics/havok_component_hooks.h>
+#include <objects/objects.h>
+#include <physics/havok_component.h>
 
 /* ---------- prototypes */
 

@@ -4,15 +4,15 @@
 #include <winternl.h>
 #include <detours.h>
 
-#include <objects/light_hooks.h>
 #include <main/main.h>
+#include <objects/lights.h>
 
 /* ---------- prototypes */
 
 static void __fastcall light_update_state__hook(long light_index);
 static decltype(light_update_state__hook) *light_update_state = nullptr;
 
-static long long __fastcall c_function_definition__evaluate_color__hook(void *function, double input, double range, float *out_color);
+static __int64 __fastcall c_function_definition__evaluate_color__hook(void *function, double input, double range, float *out_color);
 static decltype(c_function_definition__evaluate_color__hook) *c_function_definition__evaluate_color = nullptr;
 
 static double __fastcall c_function_definition__evaluate_scalar__hook(void *function, double input, double range);
@@ -45,7 +45,7 @@ static long g_updating_light_state_index = -1;
 
 /* ---------- private code */
 
-static long long __fastcall c_function_definition__evaluate_color__hook(void *function, double input, double range, float *out_color)
+static __int64 __fastcall c_function_definition__evaluate_color__hook(void *function, double input, double range, float *out_color)
 {
 	auto result = c_function_definition__evaluate_color(function, input, range, out_color);
 

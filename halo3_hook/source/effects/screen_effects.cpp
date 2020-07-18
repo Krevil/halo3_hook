@@ -1,4 +1,5 @@
 
+#include <stddef.h>
 #include <string.h>
 
 #define WIN32_LEAN_AND_MEAN
@@ -10,7 +11,7 @@
 #include <math/real_math.h>
 #include <memory/data.h>
 #include <cache/cache_file_tag_access.h>
-#include <effects/screen_effect_hooks.h>
+#include <effects/screen_effects.h>
 
 /* ---------- prototypes */
 
@@ -51,11 +52,9 @@ static void __fastcall screen_effect_sample(
 
 	s_data_array *screen_effects = *main_get_tls_offset<s_data_array **>(0x210);
 
-	for (long long i = data_next_index(screen_effects, -1);
-		i != 0xFFFFFFFF;
-		i = data_next_index(screen_effects, i))
+	for (long i = data_next_index(screen_effects, -1); i != -1; i = data_next_index(screen_effects, i))
 	{
-		void *datum = (char *)screen_effects->data + ((long long)screen_effects->size * (i & 0xFFFF));
+		void *datum = (char *)screen_effects->data + ((size_t)screen_effects->size * (i & 0xFFFF));
 		void *definition = tag_get('sefc', *(long *)((char *)datum + 0x4));
 
 		//

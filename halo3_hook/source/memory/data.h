@@ -43,4 +43,4 @@ struct s_data_iterator
 
 /* ---------- prototypes/data.cpp */
 
-long long __fastcall data_next_index(s_data_array *data, short index);
+long data_next_index(s_data_array *data, long index);

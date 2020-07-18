@@ -13,10 +13,11 @@ main.cpp
 
 #include <main/main.h>
 
-#include <objects/light_hooks.h>
-#include <objects/object_hooks.h>
-#include <effects/screen_effect_hooks.h>
-#include <physics/havok_component_hooks.h>
+#include <objects/lights.h>
+#include <objects/objects.h>
+#include <effects/screen_effects.h>
+#include <physics/havok_component.h>
+#include <scenario/scenario_kill_trigger_volumes.h>
 
 /* ---------- structures */
 
@@ -84,7 +85,7 @@ void *main_get_tls_address()
 {
 	assert(main_initialized());
 
-	long long tls_index = *main_get_module_offset<long *>(0x9F219C);
+	__int64 tls_index = *main_get_module_offset<long *>(0x9F219C);
 
 	return *(void **)(__readgsqword(0x58u) + (8 * tls_index));
 }
@@ -133,6 +134,7 @@ static bool main_initialize_detours()
 	object_hooks_initialize();
 	screen_effect_hooks_initialize();
 	havok_component_hooks_initialize();
+	scenario_kill_trigger_volume_hooks_initialize();
 
 	return DetourTransactionCommit() == NO_ERROR;
 }
@@ -142,6 +144,7 @@ void main_dispose_detours()
 	DetourTransactionBegin();
 	DetourUpdateThread(GetCurrentThread());
 
+	scenario_kill_trigger_volume_hooks_dispose();
 	havok_component_hooks_dispose();
 	screen_effect_hooks_dispose();
 	object_hooks_dispose();
@@ -170,7 +173,7 @@ BOOL WINAPI DllMain(HINSTANCE instance, DWORD reason, LPVOID)
 	return TRUE;
 }
 
-extern "C" long long __stdcall CreateDataAccess(void *address)
+extern "C" __int64 __stdcall CreateDataAccess(void *address)
 {
 	static decltype(CreateDataAccess) *CreateDataAccess_original = nullptr;
 
@@ -188,7 +191,7 @@ extern "C" long long __stdcall CreateDataAccess(void *address)
 	return CreateDataAccess_original(address);
 }
 
-extern "C" long long __stdcall CreateGameEngine(void *address)
+extern "C" __int64 __stdcall CreateGameEngine(void *address)
 {
 	static decltype(CreateGameEngine) *CreateGameEngine_original = nullptr;
 
@@ -206,7 +209,7 @@ extern "C" long long __stdcall CreateGameEngine(void *address)
 	return CreateGameEngine_original(address);
 }
 
-extern "C" long long __stdcall SetLibrarySettings(void *address)
+extern "C" __int64 __stdcall SetLibrarySettings(void *address)
 {
 	static decltype(SetLibrarySettings) *SetLibrarySettings_original = nullptr;
 
