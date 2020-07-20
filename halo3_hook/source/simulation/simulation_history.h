@@ -22,13 +22,11 @@ enum e_simulation_history_flags
 
 /* ---------- classes */
 
-class c_simulation_history_action
+struct s_simulation_history_action
 {
-public:
-	virtual ~c_simulation_history_action();
-
-	virtual const wchar_t *get_description() const = 0;
-	virtual void apply() = 0;
+	const wchar_t *description;
+	void (*apply)(void *data);
+	void *data;
 };
 
 class c_simulation_history_manager
@@ -52,7 +50,10 @@ public:
 	void request_redo();
 	void perform_redo();
 
-	void push(c_simulation_history_action *action);
+	void push(const wchar_t *description, void *address, void(*apply)(void *));
+
+	s_simulation_history_action &get_undo_top();
+	s_simulation_history_action &get_redo_top();
 
 	void update();
 
@@ -60,9 +61,9 @@ private:
 	c_flags<e_simulation_history_flags, qword,
 		k_number_of_simulation_history_flags> m_flags;
 
-	c_static_stack<c_simulation_history_action *,
+	c_static_stack<s_simulation_history_action,
 		k_maximum_simulation_history_action_count> m_undo_stack;
 
-	c_static_stack<c_simulation_history_action *,
+	c_static_stack<s_simulation_history_action,
 		k_maximum_simulation_history_action_count> m_redo_stack;
 };

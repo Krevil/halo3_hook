@@ -8,6 +8,7 @@
 #include <input/input.h>
 #include <interface/chud/chud_messaging.h>
 #include <main/main.h>
+#include <scenario/scenario_map_variant.h>
 #include <simulation/simulation_history.h>
 
 /* ---------- constants */
@@ -15,22 +16,6 @@
 enum
 {
 	k_map_variant_data_size = 0xE090
-};
-
-/* ---------- classes */
-
-class c_simulation_history_map_variant_action :
-	public c_simulation_history_action
-{
-public:
-	c_simulation_history_map_variant_action(const wchar_t *description, void *address);
-
-	const wchar_t *get_description() const;
-	void apply();
-
-private:
-	const wchar_t *m_description;
-	char m_map_variant_data[k_map_variant_data_size];
 };
 
 /* ---------- globals */
@@ -70,29 +55,6 @@ void game_engine_sandbox_hooks_dispose()
 
 /* ---------- private code */
 
-const wchar_t *c_simulation_history_map_variant_action::get_description() const
-{
-	return m_description;
-}
-
-void c_simulation_history_map_variant_action::apply()
-{
-	if (!game_is_authoritative() || !g_history_manager.is_recording())
-	{
-		return;
-	}
-
-
-}
-
-c_simulation_history_map_variant_action::c_simulation_history_map_variant_action(const wchar_t *description, void *address) :
-	m_description(description),
-	m_map_variant_data()
-{
-	assert(address);
-	memcpy_s(m_map_variant_data, sizeof(m_map_variant_data), address, k_map_variant_data_size);
-}
-
 static bool __fastcall c_sandbox_engine__initialize_for_new_map(void *engine, void *address)
 {
 	if (!c_sandbox_engine__initialize_for_new_map__original(engine, address))
@@ -118,6 +80,12 @@ static void __fastcall c_sandbox_engine__update(void *engine, void *address)
 			return;
 		}
 
+		s_simulation_history_action &action = g_history_manager.get_undo_top();
+
+		wchar_t message[256];
+		swprintf_s(message, L"Undo %s", action.description);
+		chud_messaging_post(0, message, 0);
+
 		g_history_manager.request_undo();
 	};
 
@@ -128,6 +96,12 @@ static void __fastcall c_sandbox_engine__update(void *engine, void *address)
 			chud_messaging_post(0, L"Nothing to redo!", 0);
 			return;
 		}
+
+		s_simulation_history_action &action = g_history_manager.get_redo_top();
+
+		wchar_t message[256];
+		swprintf_s(message, L"Redo %s", action.description);
+		chud_messaging_post(0, message, 0);
 
 		g_history_manager.request_redo();
 	};
@@ -152,10 +126,21 @@ static void __fastcall c_sandbox_engine__update(void *engine, void *address)
 			redo();
 		}
 	}
+
+	g_history_manager.update();
+}
+
+void simulation_history_action_undo(void *data)
+{
+	assert(data);
 }
 
 void __fastcall game_engine_sandbox_start_editing_object(long player_index, long map_variant_index)
 {
-	auto edit_object_action = c_simulation_history_map_variant_action(L"object grabbed", nullptr);
+	if (game_is_authoritative() && g_history_manager.is_recording())
+	{
+		g_history_manager.push(L"object grabbed", game_engine_get_runtime_map_variant(), simulation_history_action_undo);
+	}
+
 	game_engine_sandbox_start_editing_object__original(player_index, map_variant_index);
 }

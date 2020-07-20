@@ -2,10 +2,6 @@
 
 /* ---------- code */
 
-c_simulation_history_action::~c_simulation_history_action()
-{
-}
-
 c_simulation_history_manager::c_simulation_history_manager() :
     m_flags(),
     m_undo_stack(),
@@ -58,10 +54,14 @@ void c_simulation_history_manager::perform_undo()
     }
 
     m_flags.set(_simulation_history_performing_undo_bit, true);
-    m_undo_stack.get_top()->apply();
+
+    s_simulation_history_action action = m_undo_stack.get_top();
+    action.apply(action.data);
+
     m_flags.set(_simulation_history_performing_undo_bit, false);
 
     m_undo_stack.pop_top();
+    m_redo_stack.push_top(action);
 }
 
 bool c_simulation_history_manager::can_redo() const
@@ -87,39 +87,58 @@ void c_simulation_history_manager::perform_redo()
     }
 
     m_flags.set(_simulation_history_performing_redo_bit, true);
-    m_redo_stack.get_top()->apply();
+    
+    s_simulation_history_action action = m_redo_stack.get_top();
+    action.apply(action.data);
+
     m_flags.set(_simulation_history_performing_redo_bit, false);
 
     m_redo_stack.pop_top();
+    m_undo_stack.push_top(action);
 }
 
-void c_simulation_history_manager::push(c_simulation_history_action *action)
+void c_simulation_history_manager::push(const wchar_t *description, void *address, void(*apply)(void *))
 {
-    assert(action);
+    assert(description);
+    assert(address);
+    assert(apply);
 
-    if (!is_recording())
+    if (is_recording())
     {
-        return;
-    }
+        s_simulation_history_action action = { description, apply, address };
 
-    if (!is_performing_undo() || is_performing_redo())
-    {
-        if (m_undo_stack.count() == m_undo_stack.maximum_count() - 1)
+        if (!is_performing_undo() || is_performing_redo())
         {
-            m_undo_stack.pop_bottom();
-        }
+            if (m_undo_stack.count() == m_undo_stack.maximum_count() - 1)
+            {
+                m_undo_stack.pop_bottom();
+            }
 
-        m_undo_stack.push_top(action);
-    }
-    else
-    {
-        if (m_redo_stack.count() == m_redo_stack.maximum_count() - 1)
+            m_undo_stack.push_top(action);
+            m_redo_stack.clear();
+        }
+        else
         {
-            m_redo_stack.pop_bottom();
-        }
+            if (m_redo_stack.count() == m_redo_stack.maximum_count() - 1)
+            {
+                m_redo_stack.pop_bottom();
+            }
 
-        m_redo_stack.push_top(action);
+            m_redo_stack.push_top(action);
+        }
     }
+}
+
+s_simulation_history_action &c_simulation_history_manager::get_undo_top()
+{
+    assert(!m_undo_stack.empty());
+    return m_undo_stack.get_top();
+}
+
+s_simulation_history_action &c_simulation_history_manager::get_redo_top()
+{
+    assert(!m_redo_stack.empty());
+    return m_redo_stack.get_top();
 }
 
 void c_simulation_history_manager::update()
