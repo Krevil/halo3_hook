@@ -60,8 +60,8 @@ private:
 		k_number_of_simulation_history_flags> m_flags;
 
 	c_static_stack<c_simulation_history_action *,
-		k_number_of_simulation_history_flags> m_undo_stack;
+		k_maximum_simulation_history_action_count> m_undo_stack;
 
 	c_static_stack<c_simulation_history_action *,
-		k_number_of_simulation_history_flags> m_redo_stack;
+		k_maximum_simulation_history_action_count> m_redo_stack;
 };

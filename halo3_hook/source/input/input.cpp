@@ -38,27 +38,27 @@ byte __fastcall input_mouse_button_frames_down(short button_index)
 
 bool input_update()
 {
-	if (GetKeyState(VK_NUMPAD1) < 0)
+	if (input_key_frames_down(_keypad_1))
 	{
 		scenario_kill_triggers_set_enabled(true);
 	}
-	else if (GetKeyState(VK_NUMPAD2) < 0)
+	else if (input_key_frames_down(_keypad_2))
 	{
 		scenario_kill_triggers_set_enabled(false);
 	}
-	else if (GetKeyState(VK_NUMPAD4) < 0)
+	else if (input_key_frames_down(_keypad_4))
 	{
 		lights_set_forced_color(true, 1.0f, 0.0f, 0.0f);
 	}
-	else if (GetKeyState(VK_NUMPAD5) < 0)
+	else if (input_key_frames_down(_keypad_5))
 	{
 		lights_set_forced_color(true, 0.0f, 1.0f, 0.0f);
 	}
-	else if (GetKeyState(VK_NUMPAD6) < 0)
+	else if (input_key_frames_down(_keypad_6))
 	{
 		lights_set_forced_color(true, 0.0f, 0.0f, 1.0f);
 	}
-	else if (GetKeyState(VK_NUMPAD7) < 0)
+	else if (input_key_frames_down(_keypad_7))
 	{
 		lights_set_forced_color(false);
 	}

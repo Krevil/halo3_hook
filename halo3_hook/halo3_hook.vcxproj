@@ -115,6 +115,7 @@
     <ClCompile Include="source\game\game.cpp" />
     <ClCompile Include="source\game\game_engine_sandbox.cpp" />
     <ClCompile Include="source\input\input.cpp" />
+    <ClCompile Include="source\interface\chud\chud_messaging.cpp" />
     <ClCompile Include="source\main\main.cpp" />
     <ClCompile Include="source\math\color_math.cpp" />
     <ClCompile Include="source\memory\data.cpp" />
@@ -134,6 +135,7 @@
     <ClInclude Include="source\game\game_engine_sandbox.h" />
     <ClInclude Include="source\input\input.h" />
     <ClInclude Include="source\input\input_constants.h" />
+    <ClInclude Include="source\interface\chud\chud_messaging.h" />
     <ClInclude Include="source\main\main.h" />
     <ClInclude Include="source\math\color_math.h" />
     <ClInclude Include="source\memory\data.h" />

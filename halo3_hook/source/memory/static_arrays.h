@@ -94,6 +94,7 @@ public:
     void clear()
     {
         m_count = 0;
+        memset(m_elements, 0, sizeof(m_elements));
     }
 
     bool valid() const
