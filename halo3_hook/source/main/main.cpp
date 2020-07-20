@@ -11,9 +11,10 @@ main.cpp
 #include <winternl.h>
 #include <detours.h>
 
-#include <main/main.h>
-
 #include <game/game.h>
+#include <game/game_engine_sandbox.h>
+#include <input/input.h>
+#include <main/main.h>
 #include <objects/lights.h>
 #include <objects/objects.h>
 #include <effects/screen_effects.h>
@@ -136,6 +137,8 @@ static bool main_initialize_detours()
 	DetourUpdateThread(GetCurrentThread());
 
 	game_hooks_initialize();
+	game_engine_sandbox_hooks_initialize();
+	input_hooks_initialize();
 	light_hooks_initialize();
 	object_hooks_initialize();
 	screen_effect_hooks_initialize();
@@ -159,6 +162,8 @@ void main_dispose_detours()
 	screen_effect_hooks_dispose();
 	object_hooks_dispose();
 	light_hooks_dispose();
+	input_hooks_dispose();
+	game_engine_sandbox_hooks_dispose();
 	game_hooks_dispose();
 
 	DetourTransactionCommit();

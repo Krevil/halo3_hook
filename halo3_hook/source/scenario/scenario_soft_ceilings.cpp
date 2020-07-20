@@ -4,7 +4,6 @@
 #include <detours.h>
 
 #include <main/main.h>
-#include <math/real_math.h>
 #include <scenario/scenario_soft_ceilings.h>
 
 /* ---------- globals */
@@ -14,25 +13,25 @@ static bool g_soft_ceilings_access = false;
 
 /* ---------- prototypes */
 
-static __int64 __fastcall scenario_soft_ceilings_get_features(void *features, const real_point3d *position, float radius, float height, float width);
+static __int64 __fastcall scenario_soft_ceilings_get_features(void *features, const real_point3d *position, real radius, real height, real width);
 static decltype(scenario_soft_ceilings_get_features) *scenario_soft_ceilings_get_features__original = nullptr;
 
-static __int64 __fastcall scenario_soft_ceilings_object_is_on_kill_surface(unsigned short object_index);
+static __int64 __fastcall scenario_soft_ceilings_object_is_on_kill_surface(word object_index);
 static decltype(scenario_soft_ceilings_object_is_on_kill_surface) *scenario_soft_ceilings_object_is_on_kill_surface__original = nullptr;
 
-static bool __fastcall scenario_soft_ceilings_pin_camera_position(real_point3d *position, float camera_radius, const float k_ceiling_search_radius);
+static bool __fastcall scenario_soft_ceilings_pin_camera_position(real_point3d *position, real camera_radius, const real k_ceiling_search_radius);
 static decltype(scenario_soft_ceilings_pin_camera_position) *scenario_soft_ceilings_pin_camera_position__original = nullptr;
 
 static __int64 __fastcall scenario_soft_ceilings_update_object(
     void *soft_ceiling_contact,
-    unsigned long *ceiling_penetrated,
+    dword *ceiling_penetrated,
     const long ultimate_parent_object_type,
     const bool ultimate_parent_is_huge_vehicle,
-    const float ultimate_parent_bounding_sphere_radius,
+    const real ultimate_parent_bounding_sphere_radius,
     const real_point3d *origin,
     const real_point3d *center,
     const bool biped_on_ground,
-    const float ceiling_search_radius);
+    const real ceiling_search_radius);
 static decltype(scenario_soft_ceilings_update_object) *scenario_soft_ceilings_update_object__original = nullptr;
 
 /* ---------- public code */
@@ -78,9 +77,9 @@ void scenario_soft_ceilings_set_enabled(bool enabled)
 static __int64 __fastcall scenario_soft_ceilings_get_features(
     void *features,
     const real_point3d *position,
-    float radius,
-    float height,
-    float width)
+    real radius,
+    real height,
+    real width)
 {
     g_soft_ceilings_access = true;
 
@@ -97,7 +96,7 @@ static __int64 __fastcall scenario_soft_ceilings_get_features(
 }
 
 static __int64 __fastcall scenario_soft_ceilings_object_is_on_kill_surface(
-    unsigned short object_index)
+    word object_index)
 {
     g_soft_ceilings_access = true;
 
@@ -111,8 +110,8 @@ static __int64 __fastcall scenario_soft_ceilings_object_is_on_kill_surface(
 
 static bool __fastcall scenario_soft_ceilings_pin_camera_position(
     real_point3d *position,
-    float camera_radius,
-    const float k_ceiling_search_radius)
+    real camera_radius,
+    const real k_ceiling_search_radius)
 {
     g_soft_ceilings_access = true;
 
@@ -128,14 +127,14 @@ static bool __fastcall scenario_soft_ceilings_pin_camera_position(
 
 static __int64 __fastcall scenario_soft_ceilings_update_object(
     void *soft_ceiling_contact,
-    unsigned long *ceiling_penetrated,
+    dword *ceiling_penetrated,
     const long ultimate_parent_object_type,
     const bool ultimate_parent_is_huge_vehicle,
-    const float ultimate_parent_bounding_sphere_radius,
+    const real ultimate_parent_bounding_sphere_radius,
     const real_point3d *origin,
     const real_point3d *center,
     const bool biped_on_ground,
-    const float ceiling_search_radius)
+    const real ceiling_search_radius)
 {
     g_soft_ceilings_access = true;
 

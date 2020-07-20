@@ -31,13 +31,13 @@ void havok_component_hooks_dispose()
 static bool __fastcall c_havok_contact_point__is_climbable_surface(void *contact_point)
 {
 	long contact_point_object_index = *(long *)((char *)contact_point + 0x14);
-	unsigned char surface_flags = *(unsigned char *)((char *)contact_point + 0x40);
+	byte surface_flags = *(byte *)((char *)contact_point + 0x40);
 	void *multiplayer_properties = object_try_and_get_multiplayer(contact_point_object_index);
 
 	if (multiplayer_properties)
 	{
-		unsigned short multiplayer_flags = *(unsigned short *)multiplayer_properties;
-		constexpr const unsigned short k_climbable_bit = 12U;
+		word multiplayer_flags = *(word *)multiplayer_properties;
+		constexpr const word k_climbable_bit = 12U;
 
 		if ((multiplayer_flags & (1U << k_climbable_bit)) != 0)
 		{

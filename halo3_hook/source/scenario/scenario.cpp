@@ -4,7 +4,6 @@
 #include <detours.h>
 
 #include <main/main.h>
-#include <math/real_math.h>
 #include <scenario/scenario.h>
 #include <scenario/scenario_soft_ceilings.h>
 

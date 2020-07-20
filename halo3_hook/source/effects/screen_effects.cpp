@@ -8,9 +8,8 @@
 
 #include <main/main.h>
 #include <math/color_math.h>
-#include <math/real_math.h>
 #include <memory/data.h>
-#include <cache/cache_file_tag_access.h>
+#include <cache/cache_files.h>
 #include <effects/screen_effects.h>
 
 /* ---------- prototypes */

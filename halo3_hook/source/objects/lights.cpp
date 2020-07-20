@@ -5,7 +5,6 @@
 #include <detours.h>
 
 #include <main/main.h>
-#include <math/color_math.h>
 #include <objects/lights.h>
 
 /* ---------- globals */
@@ -44,7 +43,7 @@ void light_hooks_dispose()
 	DetourDetach((PVOID *)&c_function_definition__evaluate_color, c_function_definition__evaluate_color__hook);
 }
 
-void lights_set_forced_color(bool enabled, float red, float green, float blue)
+void lights_set_forced_color(bool enabled, real red, real green, real blue)
 {
 	g_forced_color_enabled = enabled;
 

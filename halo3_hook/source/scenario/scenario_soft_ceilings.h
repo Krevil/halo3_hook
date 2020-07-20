@@ -1,5 +1,7 @@
 #pragma once
 
+#include <cseries/cseries.h>
+
 /* ---------- prototypes/scenario_soft_ceilings.cpp */
 
 void scenario_soft_ceiling_hooks_initialize();

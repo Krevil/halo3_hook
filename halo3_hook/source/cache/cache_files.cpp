@@ -1,20 +1,17 @@
 
+#include <cache/cache_files.h>
 #include <main/main.h>
-#include <cache/cache_file_tag_access.h>
 
 /* ---------- code */
 
 void *tag_get(
-    unsigned long group_tag,
+    tag /* group_tag */,
     long index)
 {
     s_cache_file_tag_instance *global_tag_instances = *main_get_module_offset<s_cache_file_tag_instance **>(0xCB3700);
     const __int64 k_virtual_to_physical_base_offset = *main_get_module_offset<const __int64 *>(0xCFEEB8);
     
-    long absolute_index = index & 0xFFFF;
-    long identifier = index >> 16;
-
-    unsigned long base_address = global_tag_instances[absolute_index].base_address;
+    dword base_address = global_tag_instances[index & 0xFFFF].base_address;
 
     if (base_address)
     {
@@ -24,7 +21,7 @@ void *tag_get(
         }
         else
         {
-            return (void *)(k_virtual_to_physical_base_offset + ((unsigned __int64)base_address * 4));
+            return (void *)(k_virtual_to_physical_base_offset + ((qword)base_address * 4));
         }
     }
 

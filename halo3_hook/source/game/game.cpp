@@ -3,12 +3,12 @@
 #include <Windows.h>
 #include <detours.h>
 
-#include <main/main.h>
 #include <game/game.h>
+#include <main/main.h>
 
 /* ---------- prototypes */
 
-static __int64 __fastcall game_update(int tick_count, float *game_seconds_elapsed);
+static __int64 __fastcall game_update(int tick_count, real *game_seconds_elapsed);
 static decltype(game_update) *game_update__original = nullptr;
 
 /* ---------- public code */
@@ -27,7 +27,7 @@ void game_hooks_dispose()
 
 /* ---------- private code */
 
-__int64 __fastcall game_update(int tick_count, float *game_seconds_elapsed)
+__int64 __fastcall game_update(int tick_count, real *game_seconds_elapsed)
 {
 	// TODO: any pre-update logic here
 

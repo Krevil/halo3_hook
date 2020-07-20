@@ -1,5 +1,7 @@
 #pragma once
 
+#include <cseries/cseries.h>
+
 /* ---------- prototypes/scenario.cpp */
 
 void scenario_hooks_initialize();

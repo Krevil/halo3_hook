@@ -1,5 +1,9 @@
 #pragma once
 
+#include <cseries/cseries.h>
+
+/* ---------- constants */
+
 enum // data array flags
 {
     _data_array_can_disconnect_bit,
@@ -7,6 +11,8 @@ enum // data array flags
     _data_array_protection_bit,
     _data_array_verify_data_pattern_bit
 };
+
+/* ---------- structures */
 
 struct s_datum_header
 {
@@ -20,8 +26,8 @@ struct s_data_array
     long size;
     char alignment_bits;
     bool valid;
-    unsigned short flags;
-    unsigned long signature;
+    word flags;
+    dword signature;
     void *allocation;
     long first_possibly_free_absolute_index;
     long count;
@@ -30,8 +36,8 @@ struct s_data_array
     short isolated_next_identifier;
     void *data;
     void *in_use_bit_vector;
-    unsigned long offset_to_data;
-    unsigned long offset_to_bit_vector;
+    dword offset_to_data;
+    dword offset_to_bit_vector;
 };
 
 struct s_data_iterator

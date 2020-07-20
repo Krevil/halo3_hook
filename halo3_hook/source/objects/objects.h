@@ -1,5 +1,7 @@
 #pragma once
 
+#include <cseries/cseries.h>
+
 /* ---------- prototypes/object_hooks.cpp */
 
 void object_hooks_initialize();

@@ -57,7 +57,7 @@
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
-      <WarningLevel>Level3</WarningLevel>
+      <WarningLevel>EnableAllWarnings</WarningLevel>
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;HALO3HOOK_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
@@ -70,6 +70,7 @@
       <FloatingPointExceptions>false</FloatingPointExceptions>
       <EnforceTypeConversionRules>true</EnforceTypeConversionRules>
       <RuntimeTypeInfo>false</RuntimeTypeInfo>
+      <DisableSpecificWarnings>4201;4514;4706;4820;%(DisableSpecificWarnings)</DisableSpecificWarnings>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -81,7 +82,7 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
-      <WarningLevel>Level3</WarningLevel>
+      <WarningLevel>EnableAllWarnings</WarningLevel>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
@@ -96,6 +97,7 @@
       <FloatingPointExceptions>false</FloatingPointExceptions>
       <EnforceTypeConversionRules>true</EnforceTypeConversionRules>
       <RuntimeTypeInfo>false</RuntimeTypeInfo>
+      <DisableSpecificWarnings>4201;4514;4706;4820;%(DisableSpecificWarnings)</DisableSpecificWarnings>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -108,9 +110,10 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="source\cache\cache_file_tag_access.cpp" />
+    <ClCompile Include="source\cache\cache_files.cpp" />
     <ClCompile Include="source\effects\screen_effects.cpp" />
     <ClCompile Include="source\game\game.cpp" />
+    <ClCompile Include="source\game\game_engine_sandbox.cpp" />
     <ClCompile Include="source\input\input.cpp" />
     <ClCompile Include="source\main\main.cpp" />
     <ClCompile Include="source\math\color_math.cpp" />
@@ -121,24 +124,31 @@
     <ClCompile Include="source\scenario\scenario.cpp" />
     <ClCompile Include="source\scenario\scenario_kill_trigger_volumes.cpp" />
     <ClCompile Include="source\scenario\scenario_soft_ceilings.cpp" />
+    <ClCompile Include="source\simulation\simulation_history.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="source\cache\cache_file_tag_access.h" />
+    <ClInclude Include="source\cache\cache_files.h" />
+    <ClInclude Include="source\cseries\cseries.h" />
     <ClInclude Include="source\effects\screen_effects.h" />
     <ClInclude Include="source\game\game.h" />
+    <ClInclude Include="source\game\game_engine_sandbox.h" />
     <ClInclude Include="source\input\input.h" />
+    <ClInclude Include="source\input\input_constants.h" />
     <ClInclude Include="source\main\main.h" />
     <ClInclude Include="source\math\color_math.h" />
-    <ClInclude Include="source\math\real_math.h" />
     <ClInclude Include="source\memory\data.h" />
+    <ClInclude Include="source\memory\static_arrays.h" />
     <ClInclude Include="source\objects\lights.h" />
     <ClInclude Include="source\objects\objects.h" />
     <ClInclude Include="source\physics\havok_component.h" />
     <ClInclude Include="source\scenario\scenario.h" />
     <ClInclude Include="source\scenario\scenario_kill_trigger_volumes.h" />
     <ClInclude Include="source\scenario\scenario_soft_ceilings.h" />
+    <ClInclude Include="source\simulation\simulation_history.h" />
+    <ClInclude Include="source\tag_files\string_ids.h" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="cpp.hint" />
     <None Include="halo3.def" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
