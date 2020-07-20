@@ -25,8 +25,9 @@ enum e_simulation_history_flags
 class c_simulation_history_action
 {
 public:
-	virtual ~c_simulation_history_action() = 0;
+	virtual ~c_simulation_history_action();
 
+	virtual const wchar_t *get_description() const = 0;
 	virtual void apply() = 0;
 };
 

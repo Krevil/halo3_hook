@@ -2,6 +2,10 @@
 
 /* ---------- code */
 
+c_simulation_history_action::~c_simulation_history_action()
+{
+}
+
 c_simulation_history_manager::c_simulation_history_manager() :
     m_flags(),
     m_undo_stack(),
@@ -89,8 +93,7 @@ void c_simulation_history_manager::perform_redo()
     m_redo_stack.pop_top();
 }
 
-void c_simulation_history_manager::push(
-    c_simulation_history_action *action)
+void c_simulation_history_manager::push(c_simulation_history_action *action)
 {
     assert(action);
 
