@@ -79,11 +79,11 @@ static void __fastcall c_sandbox_engine__update(void *engine, void *address)
 		g_history_manager.request_redo();
 	};
 
-	if (input_key_frames_down(_key_control))
+	if (input_key_frames_down(_key_control) == 1)
 	{
-		if (input_key_frames_down(_key_z))
+		if (input_key_frames_down(_key_z) == 1)
 		{
-			if (input_key_frames_down(_key_shift))
+			if (input_key_frames_down(_key_shift) == 1)
 			{
 				redo();
 			}
@@ -92,7 +92,7 @@ static void __fastcall c_sandbox_engine__update(void *engine, void *address)
 				undo();
 			}
 		}
-		else if (input_key_frames_down(_key_y))
+		else if (input_key_frames_down(_key_y) == 1)
 		{
 			redo();
 		}
