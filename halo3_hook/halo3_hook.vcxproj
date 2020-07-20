@@ -70,7 +70,7 @@
       <FloatingPointExceptions>false</FloatingPointExceptions>
       <EnforceTypeConversionRules>true</EnforceTypeConversionRules>
       <RuntimeTypeInfo>false</RuntimeTypeInfo>
-      <DisableSpecificWarnings>4201;4514;4706;4820;%(DisableSpecificWarnings)</DisableSpecificWarnings>
+      <DisableSpecificWarnings>4201;4514;4706;4820;5045;%(DisableSpecificWarnings)</DisableSpecificWarnings>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -97,7 +97,7 @@
       <FloatingPointExceptions>false</FloatingPointExceptions>
       <EnforceTypeConversionRules>true</EnforceTypeConversionRules>
       <RuntimeTypeInfo>false</RuntimeTypeInfo>
-      <DisableSpecificWarnings>4201;4514;4706;4820;%(DisableSpecificWarnings)</DisableSpecificWarnings>
+      <DisableSpecificWarnings>4201;4514;4706;4820;5045;%(DisableSpecificWarnings)</DisableSpecificWarnings>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -122,6 +122,7 @@
     <ClCompile Include="source\objects\lights.cpp" />
     <ClCompile Include="source\objects\objects.cpp" />
     <ClCompile Include="source\physics\havok_component.cpp" />
+    <ClCompile Include="source\render\render_objects.cpp" />
     <ClCompile Include="source\scenario\scenario.cpp" />
     <ClCompile Include="source\scenario\scenario_kill_trigger_volumes.cpp" />
     <ClCompile Include="source\scenario\scenario_soft_ceilings.cpp" />
@@ -143,6 +144,7 @@
     <ClInclude Include="source\objects\lights.h" />
     <ClInclude Include="source\objects\objects.h" />
     <ClInclude Include="source\physics\havok_component.h" />
+    <ClInclude Include="source\render\render_objects.h" />
     <ClInclude Include="source\scenario\scenario.h" />
     <ClInclude Include="source\scenario\scenario_kill_trigger_volumes.h" />
     <ClInclude Include="source\scenario\scenario_soft_ceilings.h" />

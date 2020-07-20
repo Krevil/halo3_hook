@@ -19,6 +19,7 @@ main.cpp
 #include <objects/objects.h>
 #include <effects/screen_effects.h>
 #include <physics/havok_component.h>
+#include <render/render_objects.h>
 #include <scenario/scenario.h>
 #include <scenario/scenario_kill_trigger_volumes.h>
 #include <scenario/scenario_soft_ceilings.h>
@@ -143,6 +144,7 @@ static bool main_initialize_detours()
 	object_hooks_initialize();
 	screen_effect_hooks_initialize();
 	havok_component_hooks_initialize();
+	render_object_hooks_initialize();
 	scenario_hooks_initialize();
 	scenario_kill_trigger_volume_hooks_initialize();
 	scenario_soft_ceiling_hooks_initialize();
@@ -158,6 +160,7 @@ void main_dispose_detours()
 	scenario_soft_ceiling_hooks_dispose();
 	scenario_kill_trigger_volume_hooks_dispose();
 	scenario_hooks_dispose();
+	render_object_hooks_dispose();
 	havok_component_hooks_dispose();
 	screen_effect_hooks_dispose();
 	object_hooks_dispose();

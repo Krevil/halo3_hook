@@ -114,7 +114,9 @@ enum e_input_key_code
     _key_delete,
     _key_end,
     _key_page_down,
-    _keypad_num_lock,
+
+    FIRST_KEYPAD_KEY,
+    _keypad_num_lock = FIRST_KEYPAD_KEY,
     _keypad_divide,
     _keypad_multiply,
     _keypad_0,
@@ -131,11 +133,19 @@ enum e_input_key_code
     _keypad_add,
     _keypad_enter,
     _keypad_decimal,
-    _key_shift,
+    LAST_KEYPAD_KEY = _keypad_decimal,
+
+    FIRST_MODIFIER_KEY,
+    _key_shift = FIRST_MODIFIER_KEY,
     _key_control,
     _key_windows,
     _key_alt,
+    LAST_MODIFIER_KEY = _key_alt,
+
     NUMBER_OF_KEYS,
+
+    NUMBER_OF_MODIFIER_KEYS = (LAST_MODIFIER_KEY + 1) - FIRST_MODIFIER_KEY,
+    NUMBER_OF_KEYPAD_KEYS = (LAST_KEYPAD_KEY + 1) - FIRST_KEYPAD_KEY,
 
     _key_question_mark = _key_forwardslash,
     _key_tilde = _key_backquote,
