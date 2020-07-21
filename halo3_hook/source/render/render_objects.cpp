@@ -39,7 +39,7 @@ void render_objects_motion_blur_set_enabled(bool enabled)
 	g_render_objects_motion_blur_enabled = enabled;
 }
 
-/* ---------- public code */
+/* ---------- private code */
 
 void __fastcall render_objects_prepare_for_window(long user_index)
 {
