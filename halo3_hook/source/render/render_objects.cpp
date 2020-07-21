@@ -34,7 +34,7 @@ bool render_objects_motion_blur_enabled()
 	return g_render_objects_motion_blur_enabled;
 }
 
-void render_objects_motion_blur_set_enabled(bool enabled)
+void render_objects_set_motion_blur_enabled(bool enabled)
 {
 	g_render_objects_motion_blur_enabled = enabled;
 }

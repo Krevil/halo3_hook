@@ -34,7 +34,7 @@ bool scenario_kill_triggers_enabled()
 	return g_kill_triggers_enabled;
 }
 
-void scenario_kill_triggers_set_enabled(bool value)
+void scenario_set_kill_triggers_enabled(bool value)
 {
 	g_kill_triggers_enabled = value;
 }

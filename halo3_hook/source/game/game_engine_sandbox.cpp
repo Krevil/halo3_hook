@@ -106,22 +106,17 @@ static void __fastcall c_sandbox_engine__update(void *engine, void *address)
 		g_history_manager.request_redo();
 	};
 
-	byte control_key_frames = input_key_frames_down(_key_control);
-	byte shift_key_frames = input_key_frames_down(_key_shift);
-	byte z_key_frames = input_key_frames_down(_key_z);
-	byte y_key_frames = input_key_frames_down(_key_y);
-
-	if (control_key_frames)
+	if (input_key_frames_down(_key_control))
 	{
-		if (shift_key_frames && z_key_frames && (control_key_frames == 1 || shift_key_frames == 1 || z_key_frames == 1))
+		if (input_key_frames_down(_key_shift) && input_key_frames_down(_key_z) == 1)
 		{
 			redo();
 		}
-		else if (z_key_frames && (control_key_frames == 1 || z_key_frames == 1))
+		else if (input_key_frames_down(_key_z) == 1)
 		{
 			undo();
 		}
-		else if (y_key_frames && (control_key_frames == 1 || y_key_frames == 1))
+		else if (input_key_frames_down(_key_y) == 1)
 		{
 			redo();
 		}

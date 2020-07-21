@@ -41,7 +41,7 @@ bool scenario_safe_zones_enabled()
 	return g_safe_zones_enabled;
 }
 
-void scenario_safe_zones_set_enabled(bool enabled)
+void scenario_set_safe_zones_enabled(bool enabled)
 {
 	g_safe_zones_enabled = enabled;
 }

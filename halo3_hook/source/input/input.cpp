@@ -6,9 +6,11 @@
 #include <input/input.h>
 #include <interface/chud/chud_messaging.h>
 #include <main/main.h>
-#include <objects/lights.h>
+#include <physics/havok_component.h>
 #include <render/render_objects.h>
+#include <scenario/scenario.h>
 #include <scenario/scenario_kill_trigger_volumes.h>
+#include <scenario/scenario_soft_ceilings.h>
 
 /* ---------- prototypes */
 
@@ -42,52 +44,70 @@ bool input_update()
 {
 	bool result = input_update__original();
 
-	byte key_frames[NUMBER_OF_KEYS];
-
-	for (short i = 0; i < NUMBER_OF_KEYS; i++)
+	if (input_key_frames_down(_keypad_1) == 1)
 	{
-		key_frames[i] = input_key_frames_down(i);
+		if (input_key_frames_down(_key_alt))
+		{
+			scenario_set_safe_zones_enabled(false);
+			chud_messaging_post(0, L"Safe zones disabled.", 0);
+		}
+		else
+		{
+			scenario_set_kill_triggers_enabled(true);
+			chud_messaging_post(0, L"Safe zones enabled.", 0);
+		}
 	}
-
-	if (key_frames[_key_control] && key_frames[_keypad_1] && (key_frames[_key_control] == 1 || key_frames[_keypad_1] == 1))
+	else if (input_key_frames_down(_keypad_2) == 1)
 	{
-		render_objects_motion_blur_set_enabled(false);
-		chud_messaging_post(0, L"Motion blur disabled.", 0);
+		if (input_key_frames_down(_key_alt))
+		{
+			scenario_set_kill_triggers_enabled(false);
+			chud_messaging_post(0, L"Kill triggers disabled.", 0);
+		}
+		else
+		{
+			scenario_set_kill_triggers_enabled(true);
+			chud_messaging_post(0, L"Kill triggers enabled.", 0);
+		}
 	}
-	else if (key_frames[_key_control] && key_frames[_keypad_2] && (key_frames[_key_control] == 1 || key_frames[_keypad_2] == 1))
+	else if (input_key_frames_down(_keypad_3) == 1)
 	{
-		render_objects_motion_blur_set_enabled(true);
-		chud_messaging_post(0, L"Motion blur enabled.", 0);
+		if (input_key_frames_down(_key_alt))
+		{
+			scenario_soft_ceilings_set_enabled(false);
+			chud_messaging_post(0, L"Soft ceilings disabled.", 0);
+		}
+		else
+		{
+			scenario_soft_ceilings_set_enabled(true);
+			chud_messaging_post(0, L"Soft ceilings enabled.", 0);
+		}
 	}
-	else if (key_frames[_keypad_1] == 1)
+	else if (input_key_frames_down(_keypad_4) == 1)
 	{
-		scenario_kill_triggers_set_enabled(true);
-		chud_messaging_post(0, L"Kill triggers enabled.", 0);
+		if (input_key_frames_down(_key_alt))
+		{
+			render_objects_set_motion_blur_enabled(false);
+			chud_messaging_post(0, L"Motion blur disabled.", 0);
+		}
+		else
+		{
+			render_objects_set_motion_blur_enabled(true);
+			chud_messaging_post(0, L"Motion blur enabled.", 0);
+		}
 	}
-	else if (key_frames[_keypad_2] == 1)
+	else if (input_key_frames_down(_keypad_5) == 1)
 	{
-		scenario_kill_triggers_set_enabled(false);
-		chud_messaging_post(0, L"Kill triggers disabled.", 0);
-	}
-	else if (key_frames[_keypad_4] == 1)
-	{
-		lights_set_forced_color(true, 1.0f, 0.0f, 0.0f);
-		chud_messaging_post(0, L"Forced light color: Red", 0);
-	}
-	else if (key_frames[_keypad_5] == 1)
-	{
-		lights_set_forced_color(true, 0.0f, 1.0f, 0.0f);
-		chud_messaging_post(0, L"Forced light color: Green", 0);
-	}
-	else if (key_frames[_keypad_6] == 1)
-	{
-		lights_set_forced_color(true, 0.0f, 0.0f, 1.0f);
-		chud_messaging_post(0, L"Forced light color: Blue", 0);
-	}
-	else if (key_frames[_keypad_7] == 1)
-	{
-		lights_set_forced_color(false);
-		chud_messaging_post(0, L"Forced light color: None", 0);
+		if (input_key_frames_down(_key_alt))
+		{
+			havok_component_set_climbable_checks_enabled(false);
+			chud_messaging_post(0, L"Climbable checks disabled.", 0);
+		}
+		else
+		{
+			havok_component_set_climbable_checks_enabled(true);
+			chud_messaging_post(0, L"Climbable checks enabled.", 0);
+		}
 	}
 
 	return result;

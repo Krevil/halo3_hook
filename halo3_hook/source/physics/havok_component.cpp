@@ -7,6 +7,10 @@
 #include <objects/objects.h>
 #include <physics/havok_component.h>
 
+/* ---------- globals */
+
+static bool g_climbable_checks_enabled = false;
+
 /* ---------- prototypes */
 
 static bool __fastcall c_havok_contact_point__is_climbable_surface(void *contact_point);
@@ -26,10 +30,25 @@ void havok_component_hooks_dispose()
 	DetourDetach((PVOID *)&c_havok_contact_point__is_climbable_surface__original, c_havok_contact_point__is_climbable_surface);
 }
 
+bool havok_component_climbable_checks_enabled()
+{
+	return g_climbable_checks_enabled;
+}
+
+void havok_component_set_climbable_checks_enabled(bool enabled)
+{
+	g_climbable_checks_enabled = enabled;
+}
+
 /* ---------- private code */
 
 static bool __fastcall c_havok_contact_point__is_climbable_surface(void *contact_point)
 {
+	if (!g_climbable_checks_enabled)
+	{
+		return true;
+	}
+
 	long contact_point_object_index = *(long *)((char *)contact_point + 0x14);
 	byte surface_flags = *(byte *)((char *)contact_point + 0x40);
 	void *multiplayer_properties = object_try_and_get_multiplayer(contact_point_object_index);
