@@ -27,9 +27,9 @@ static decltype(c_function_definition__evaluate_scalar__hook) *c_function_defini
 
 void light_hooks_initialize()
 {
-	c_function_definition__evaluate_color = main_get_module_offset<decltype(c_function_definition__evaluate_color)>(0x43C1C0);
-	c_function_definition__evaluate_scalar = main_get_module_offset<decltype(c_function_definition__evaluate_scalar)>(0x43C660);
-	light_update_state = main_get_module_offset<decltype(light_update_state)>(0x5C1040);
+	c_function_definition__evaluate_color = main_get_from_module_offset<decltype(c_function_definition__evaluate_color)>(0x43C1C0);
+	c_function_definition__evaluate_scalar = main_get_from_module_offset<decltype(c_function_definition__evaluate_scalar)>(0x43C660);
+	light_update_state = main_get_from_module_offset<decltype(light_update_state)>(0x5C1040);
 
 	DetourAttach((PVOID *)&c_function_definition__evaluate_color, c_function_definition__evaluate_color__hook);
 	DetourAttach((PVOID *)&c_function_definition__evaluate_scalar, c_function_definition__evaluate_scalar__hook);

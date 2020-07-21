@@ -21,7 +21,7 @@ static decltype(screen_effect_sample) *screen_effect_sample__original = nullptr;
 
 void screen_effect_hooks_initialize()
 {
-	screen_effect_sample__original = main_get_module_offset<decltype(screen_effect_sample__original)>(0x377C40);
+	screen_effect_sample__original = main_get_from_module_offset<decltype(screen_effect_sample__original)>(0x377C40);
 
 	DetourAttach((PVOID *)&screen_effect_sample__original, screen_effect_sample);
 }
@@ -49,7 +49,7 @@ static void __fastcall screen_effect_sample(
 	set_real_linear_rgb_color((real_linear_rgb_color *)((char *)screen_effect_settings + 0x20), 1.0f, 1.0f, 1.0f);
 	set_real_linear_rgb_color((real_linear_rgb_color *)((char *)screen_effect_settings + 0x2C), 0.0f, 0.0f, 0.0f);
 
-	s_data_array *screen_effects = *main_get_tls_offset<s_data_array **>(0x210);
+	s_data_array *screen_effects = *main_get_from_tls_offset<s_data_array **>(0x210);
 
 	for (long i = data_next_index(screen_effects, -1); i != -1; i = data_next_index(screen_effects, i))
 	{

@@ -37,9 +37,9 @@ static decltype(game_engine_sandbox_start_editing_object) *game_engine_sandbox_s
 
 void game_engine_sandbox_hooks_initialize()
 {
-	c_sandbox_engine__initialize_for_new_map__original = main_get_module_offset<decltype(c_sandbox_engine__initialize_for_new_map__original)>(0x2BCA10);
-	c_sandbox_engine__update__original = main_get_module_offset<decltype(c_sandbox_engine__update__original)>(0x2BD020);
-	game_engine_sandbox_start_editing_object__original = main_get_module_offset<decltype(game_engine_sandbox_start_editing_object__original)>(0x2C04D0);
+	c_sandbox_engine__initialize_for_new_map__original = main_get_from_module_offset<decltype(c_sandbox_engine__initialize_for_new_map__original)>(0x2BCA10);
+	c_sandbox_engine__update__original = main_get_from_module_offset<decltype(c_sandbox_engine__update__original)>(0x2BD020);
+	game_engine_sandbox_start_editing_object__original = main_get_from_module_offset<decltype(game_engine_sandbox_start_editing_object__original)>(0x2C04D0);
 
 	DetourAttach((PVOID *)&c_sandbox_engine__update__original, c_sandbox_engine__update);
 	DetourAttach((PVOID *)&c_sandbox_engine__initialize_for_new_map__original, c_sandbox_engine__initialize_for_new_map);

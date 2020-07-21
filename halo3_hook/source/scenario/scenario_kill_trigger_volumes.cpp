@@ -19,7 +19,7 @@ static decltype(scenario_kill_trigger_volume_test_object) *scenario_kill_trigger
 
 void scenario_kill_trigger_volume_hooks_initialize()
 {
-	scenario_kill_trigger_volume_test_object__original = main_get_module_offset<decltype(scenario_kill_trigger_volume_test_object__original)>(0x383110);
+	scenario_kill_trigger_volume_test_object__original = main_get_from_module_offset<decltype(scenario_kill_trigger_volume_test_object__original)>(0x383110);
 
 	DetourAttach((PVOID *)&scenario_kill_trigger_volume_test_object__original, scenario_kill_trigger_volume_test_object);
 }

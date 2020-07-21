@@ -114,6 +114,7 @@
     <ClCompile Include="source\effects\screen_effects.cpp" />
     <ClCompile Include="source\game\game.cpp" />
     <ClCompile Include="source\game\game_engine_sandbox.cpp" />
+    <ClCompile Include="source\game\players.cpp" />
     <ClCompile Include="source\input\input.cpp" />
     <ClCompile Include="source\interface\chud\chud_messaging.cpp" />
     <ClCompile Include="source\main\main.cpp" />
@@ -135,6 +136,7 @@
     <ClInclude Include="source\effects\screen_effects.h" />
     <ClInclude Include="source\game\game.h" />
     <ClInclude Include="source\game\game_engine_sandbox.h" />
+    <ClInclude Include="source\game\players.h" />
     <ClInclude Include="source\input\input.h" />
     <ClInclude Include="source\input\input_constants.h" />
     <ClInclude Include="source\interface\chud\chud_messaging.h" />

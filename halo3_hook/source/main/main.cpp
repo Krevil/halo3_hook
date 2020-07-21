@@ -13,6 +13,7 @@ main.cpp
 
 #include <game/game.h>
 #include <game/game_engine_sandbox.h>
+#include <game/players.h>
 #include <input/input.h>
 #include <main/main.h>
 #include <objects/lights.h>
@@ -92,7 +93,7 @@ void *main_get_tls_address()
 {
 	assert(main_initialized());
 
-	__int64 tls_index = *main_get_module_offset<long *>(0x9F219C);
+	__int64 tls_index = *main_get_from_module_offset<long *>(0x9F219C);
 
 	return *(void **)(__readgsqword(0x58u) + (8 * tls_index));
 }
@@ -139,6 +140,7 @@ static bool main_initialize_detours()
 
 	game_hooks_initialize();
 	game_engine_sandbox_hooks_initialize();
+	player_hooks_initialize();
 	input_hooks_initialize();
 	light_hooks_initialize();
 	object_hooks_initialize();
@@ -166,6 +168,7 @@ void main_dispose_detours()
 	object_hooks_dispose();
 	light_hooks_dispose();
 	input_hooks_dispose();
+	player_hooks_dispose();
 	game_engine_sandbox_hooks_dispose();
 	game_hooks_dispose();
 

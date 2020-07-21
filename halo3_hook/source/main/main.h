@@ -15,14 +15,14 @@ void *main_get_tls_address();
 /* ---------- inline code */
 
 template <typename t_type>
-inline t_type main_get_module_offset(qword offset = 0)
+inline t_type main_get_from_module_offset(qword offset = 0)
 {
 	auto address = main_get_module_address();
 	return (t_type)((char *)address + offset);
 }
 
 template <typename t_type>
-inline t_type main_get_tls_offset(qword offset = 0)
+inline t_type main_get_from_tls_offset(qword offset = 0)
 {
 	auto address = main_get_tls_address();
 	return (t_type)((char *)address + offset);
