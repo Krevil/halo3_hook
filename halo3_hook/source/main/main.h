@@ -9,21 +9,19 @@ void main_dispose();
 
 bool main_initialized();
 void *main_get_base_address();
-void *main_get_module_address();
-void *main_get_tls_address();
+void *main_get_module_address(qword offset = 0);
+void *main_get_tls_address(qword offset = 0);
 
 /* ---------- inline code */
 
 template <typename t_type>
-inline t_type main_get_module_pointer_at_offset(qword offset = 0)
+inline t_type main_get_typed_module_address(qword offset = 0)
 {
-	auto address = main_get_module_address();
-	return (t_type)((char *)address + offset);
+	return (t_type)main_get_module_address(offset);
 }
 
 template <typename t_type>
-inline t_type main_get_tls_pointer_at_offset(qword offset = 0)
+inline t_type main_get_typed_tls_address(qword offset = 0)
 {
-	auto address = main_get_tls_address();
-	return (t_type)((char *)address + offset);
+	return (t_type)main_get_tls_address(offset);
 }

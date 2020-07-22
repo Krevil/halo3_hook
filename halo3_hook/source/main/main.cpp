@@ -83,19 +83,19 @@ void *main_get_base_address()
 	return main_globals.base_address;
 }
 
-void *main_get_module_address()
+void *main_get_module_address(qword offset)
 {
 	assert(main_initialized());
-	return main_globals.module_address;
+	return (char *)main_globals.module_address + offset;
 }
 
-void *main_get_tls_address()
+void *main_get_tls_address(qword offset)
 {
 	assert(main_initialized());
 
-	__int64 tls_index = *main_get_module_pointer_at_offset<long *>(0x9F219C);
+	__int64 tls_index = *main_get_typed_module_address<long *>(0x9F219C);
 
-	return *(void **)(__readgsqword(0x58u) + (8 * tls_index));
+	return *(char **)(__readgsqword(0x58u) + (8 * tls_index)) + offset;
 }
 
 /* ---------- private code */
@@ -126,6 +126,22 @@ static bool main_initialize_globals(void *base_address)
 	{
 		MessageBox(nullptr, "Failed to load original module!", "Error", MB_OK | MB_ICONERROR);
 		return false;
+	}
+
+	MEMORY_BASIC_INFORMATION memory_information;
+
+	for (qword module_offset = 0;
+		VirtualQuery((char *)main_globals.module_address + module_offset, &memory_information, sizeof(memory_information));
+		module_offset += memory_information.RegionSize)
+	{
+		if (memory_information.Protect == PAGE_EXECUTE_READ)
+		{
+			VirtualProtect(
+				memory_information.BaseAddress,
+				memory_information.RegionSize,
+				PAGE_EXECUTE_READWRITE,
+				&memory_information.Protect);
+		}
 	}
 
 	main_globals.initialized = true;

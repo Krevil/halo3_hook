@@ -23,8 +23,8 @@ static decltype(scenario_position_inside_safe_zone) *scenario_position_inside_sa
 
 void scenario_hooks_initialize()
 {
-	global_structure_design_get__original = main_get_module_pointer_at_offset<decltype(global_structure_design_get__original)>(0x244F40);
-	scenario_position_inside_safe_zone__original = main_get_module_pointer_at_offset<decltype(scenario_position_inside_safe_zone__original)>(0x246150);
+	global_structure_design_get__original = main_get_typed_module_address<decltype(global_structure_design_get__original)>(0x244F40);
+	scenario_position_inside_safe_zone__original = main_get_typed_module_address<decltype(scenario_position_inside_safe_zone__original)>(0x246150);
 
 	DetourAttach((PVOID *)&global_structure_design_get__original, global_structure_design_get);
 	DetourAttach((PVOID *)&scenario_position_inside_safe_zone__original, scenario_position_inside_safe_zone);

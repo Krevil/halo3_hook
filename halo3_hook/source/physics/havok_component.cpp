@@ -22,7 +22,7 @@ static decltype(c_havok_contact_point__is_climbable_surface) *c_havok_contact_po
 
 void havok_component_hooks_initialize()
 {
-	c_havok_contact_point__is_climbable_surface__original = main_get_module_pointer_at_offset<decltype(c_havok_contact_point__is_climbable_surface__original)>(0x334070);
+	c_havok_contact_point__is_climbable_surface__original = main_get_typed_module_address<decltype(c_havok_contact_point__is_climbable_surface__original)>(0x334070);
 
 	DetourAttach((PVOID *)&c_havok_contact_point__is_climbable_surface__original, c_havok_contact_point__is_climbable_surface);
 }

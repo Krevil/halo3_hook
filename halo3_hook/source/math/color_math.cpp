@@ -10,5 +10,5 @@ void __fastcall set_real_linear_rgb_color(
 	real green,
 	real blue)
 {
-	main_get_module_pointer_at_offset<decltype(&set_real_linear_rgb_color)>(0x377030)(result, red, green, blue);
+	main_get_typed_module_address<decltype(&set_real_linear_rgb_color)>(0x377030)(result, red, green, blue);
 }

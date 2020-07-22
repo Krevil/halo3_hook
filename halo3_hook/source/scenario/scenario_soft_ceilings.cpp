@@ -38,10 +38,10 @@ static decltype(scenario_soft_ceilings_update_object) *scenario_soft_ceilings_up
 
 void scenario_soft_ceiling_hooks_initialize()
 {
-    scenario_soft_ceilings_get_features__original = main_get_module_pointer_at_offset<decltype(scenario_soft_ceilings_get_features__original)>(0x389E80);
-    scenario_soft_ceilings_object_is_on_kill_surface__original = main_get_module_pointer_at_offset<decltype(scenario_soft_ceilings_object_is_on_kill_surface__original)>(0x38A410);
-    scenario_soft_ceilings_pin_camera_position__original = main_get_module_pointer_at_offset<decltype(scenario_soft_ceilings_pin_camera_position__original)>(0x38A700);
-    scenario_soft_ceilings_update_object__original = main_get_module_pointer_at_offset<decltype(scenario_soft_ceilings_update_object__original)>(0x38AC60);
+    scenario_soft_ceilings_get_features__original = main_get_typed_module_address<decltype(scenario_soft_ceilings_get_features__original)>(0x389E80);
+    scenario_soft_ceilings_object_is_on_kill_surface__original = main_get_typed_module_address<decltype(scenario_soft_ceilings_object_is_on_kill_surface__original)>(0x38A410);
+    scenario_soft_ceilings_pin_camera_position__original = main_get_typed_module_address<decltype(scenario_soft_ceilings_pin_camera_position__original)>(0x38A700);
+    scenario_soft_ceilings_update_object__original = main_get_typed_module_address<decltype(scenario_soft_ceilings_update_object__original)>(0x38AC60);
 
     DetourAttach((PVOID *)&scenario_soft_ceilings_get_features__original, scenario_soft_ceilings_get_features);
     DetourAttach((PVOID *)&scenario_soft_ceilings_object_is_on_kill_surface__original, scenario_soft_ceilings_object_is_on_kill_surface);

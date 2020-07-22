@@ -27,8 +27,8 @@ static decltype(player_spawn) *player_spawn__original = nullptr;
 
 void player_hooks_initialize()
 {
-    player_get_character_type__original = main_get_module_pointer_at_offset<decltype(player_get_character_type__original)>(0x2AAF60);
-    player_spawn__original = main_get_module_pointer_at_offset<decltype(player_spawn__original)>(0x2ACD40);
+    player_get_character_type__original = main_get_typed_module_address<decltype(player_get_character_type__original)>(0x2AAF60);
+    player_spawn__original = main_get_typed_module_address<decltype(player_spawn__original)>(0x2ACD40);
 
     DetourAttach((PVOID *)&player_get_character_type__original, player_get_character_type);
     DetourAttach((PVOID *)&player_spawn__original, player_spawn);
@@ -55,7 +55,7 @@ void players_set_force_multiplayer_customization_enabled(bool enabled)
 e_player_character_type __fastcall player_get_character_type(
     long player_index)
 {
-    byte *campaign_check_instruction = main_get_module_pointer_at_offset<byte *>(0x2AAFB0);
+    byte *campaign_check_instruction = main_get_typed_module_address<byte *>(0x2AAFB0);
 
     if (g_force_multiplayer_customization && game_is_campaign())
     {
@@ -79,7 +79,7 @@ bool __fastcall player_spawn(
     const real_point3d *optional_desired_spawn_location,
     const real *optional_desired_facing)
 {
-    byte *campaign_check_instruction = main_get_module_pointer_at_offset<byte *>(0x2AD0EC);
+    byte *campaign_check_instruction = main_get_typed_module_address<byte *>(0x2AD0EC);
 
     if (g_force_multiplayer_customization)
     {

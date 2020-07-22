@@ -18,5 +18,5 @@ void object_hooks_dispose()
 
 void *object_try_and_get_and_verify_type(long object_index, dword valid_type_flags)
 {
-    return main_get_module_pointer_at_offset<void *(__fastcall *)(long, dword)>(0x562C50)(object_index, valid_type_flags);
+    return main_get_typed_module_address<void *(__fastcall *)(long, dword)>(0x562C50)(object_index, valid_type_flags);
 }

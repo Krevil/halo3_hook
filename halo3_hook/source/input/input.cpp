@@ -3,6 +3,7 @@
 #include <Windows.h>
 #include <detours.h>
 
+#include <game/players.h>
 #include <input/input.h>
 #include <interface/chud/chud_messaging.h>
 #include <main/main.h>
@@ -20,7 +21,7 @@ static decltype(input_update) *input_update__original = nullptr;
 
 void input_hooks_initialize()
 {
-	input_update__original = main_get_module_pointer_at_offset<decltype(input_update__original)>(0x255360);
+	input_update__original = main_get_typed_module_address<decltype(input_update__original)>(0x255360);
 
 	DetourAttach((PVOID *)&input_update__original, input_update);
 }
@@ -32,12 +33,12 @@ void input_hooks_dispose()
 
 byte __fastcall input_key_frames_down(short key_code)
 {
-	return main_get_module_pointer_at_offset<decltype(&input_key_frames_down)>(0x254B20)(key_code);
+	return main_get_typed_module_address<decltype(&input_key_frames_down)>(0x254B20)(key_code);
 }
 
 byte __fastcall input_mouse_button_frames_down(short button_index)
 {
-	return main_get_module_pointer_at_offset<decltype(&input_mouse_button_frames_down)>(0x254CD0)(button_index);
+	return main_get_typed_module_address<decltype(&input_mouse_button_frames_down)>(0x254CD0)(button_index);
 }
 
 bool input_update()
@@ -107,6 +108,19 @@ bool input_update()
 		{
 			havok_component_set_climbable_checks_enabled(true);
 			chud_messaging_post(0, L"Climbable checks enabled.", 0);
+		}
+	}
+	else if (input_key_frames_down(_keypad_6) == 1)
+	{
+		if (input_key_frames_down(_key_alt))
+		{
+			players_set_force_multiplayer_customization_enabled(false);
+			chud_messaging_post(0, L"Force multiplayer customization disabled.", 0);
+		}
+		else
+		{
+			players_set_force_multiplayer_customization_enabled(true);
+			chud_messaging_post(0, L"Force multiplayer customization enabled.", 0);
 		}
 	}
 
