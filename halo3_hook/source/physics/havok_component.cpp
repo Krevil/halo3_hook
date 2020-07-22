@@ -11,7 +11,7 @@
 
 /* ---------- globals */
 
-static bool g_climbable_checks_enabled = false;
+static bool g_climbable_checks_enabled = true;
 
 /* ---------- prototypes */
 
