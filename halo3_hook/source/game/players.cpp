@@ -7,6 +7,7 @@
 #include <game/game_globals.h>
 #include <game/players.h>
 #include <main/main.h>
+#include <memory/x86_64.h>
 
 /* ---------- globals */
 
@@ -60,7 +61,7 @@ e_player_character_type __fastcall player_get_character_type(
     if (g_force_multiplayer_customization && game_is_campaign())
     {
         // flip campaign check for player character type
-        campaign_check_instruction[0] = 0x75;
+        campaign_check_instruction[0] = _x86_64_jnz;
     }
 
     e_player_character_type result = player_get_character_type__original(player_index);
@@ -68,7 +69,7 @@ e_player_character_type __fastcall player_get_character_type(
     if (g_force_multiplayer_customization && game_is_campaign())
     {
         // restore campaign check for player character type
-        campaign_check_instruction[0] = 0x74;
+        campaign_check_instruction[0] = _x86_64_jz;
     }
 
     return result;
@@ -84,8 +85,8 @@ bool __fastcall player_spawn(
     if (g_force_multiplayer_customization)
     {
         // disable campaign check for multiplayer customization
-        campaign_check_instruction[0] = 0x90;
-        campaign_check_instruction[1] = 0x90;
+        campaign_check_instruction[0] = _x86_64_nop;
+        campaign_check_instruction[1] = _x86_64_nop;
     }
 
     bool result = player_spawn__original(
@@ -96,8 +97,8 @@ bool __fastcall player_spawn(
     if (g_force_multiplayer_customization)
     {
         // restore campaign check for multiplayer customization
-        campaign_check_instruction[0] = 0x75;
-        campaign_check_instruction[1] = 0x0D;
+        campaign_check_instruction[0] = _x86_64_jnz;
+        campaign_check_instruction[1] = 13;
     }
 
     return result;

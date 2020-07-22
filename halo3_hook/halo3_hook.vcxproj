@@ -148,6 +148,7 @@
     <ClInclude Include="source\math\color_math.h" />
     <ClInclude Include="source\memory\data.h" />
     <ClInclude Include="source\memory\static_arrays.h" />
+    <ClInclude Include="source\memory\x86_64.h" />
     <ClInclude Include="source\objects\lights.h" />
     <ClInclude Include="source\objects\objects.h" />
     <ClInclude Include="source\physics\havok_component.h" />
