@@ -520,3 +520,11 @@ struct double_plane3d
     double_vector3d n;
     long double d;
 };
+
+/* ---------- memory management */
+
+template <typename t_type>
+struct ptr32_t
+{
+    dword m_stored;
+};

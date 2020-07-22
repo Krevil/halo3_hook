@@ -3,9 +3,11 @@
 #include <Windows.h>
 #include <detours.h>
 
+#include <cache/cache_files.h>
 #include <main/main.h>
 #include <objects/objects.h>
 #include <physics/havok_component.h>
+#include <tag_files/tag_groups.h>
 
 /* ---------- globals */
 
@@ -20,7 +22,7 @@ static decltype(c_havok_contact_point__is_climbable_surface) *c_havok_contact_po
 
 void havok_component_hooks_initialize()
 {
-	c_havok_contact_point__is_climbable_surface__original = main_get_from_module_offset<decltype(c_havok_contact_point__is_climbable_surface__original)>(0x334070);
+	c_havok_contact_point__is_climbable_surface__original = main_get_module_pointer_at_offset<decltype(c_havok_contact_point__is_climbable_surface__original)>(0x334070);
 
 	DetourAttach((PVOID *)&c_havok_contact_point__is_climbable_surface__original, c_havok_contact_point__is_climbable_surface);
 }
@@ -49,18 +51,28 @@ static bool __fastcall c_havok_contact_point__is_climbable_surface(void *contact
 		return true;
 	}
 
-	long contact_point_object_index = *(long *)((char *)contact_point + 0x14);
-	byte surface_flags = *(byte *)((char *)contact_point + 0x40);
-	void *multiplayer_properties = object_try_and_get_multiplayer(contact_point_object_index);
+	long object_index = *(long *)((char *)contact_point + 0x14);
+	void *object_datum = object_try_and_get_and_verify_type(object_index, (dword)NONE);
 
-	if (multiplayer_properties)
+	if (object_datum)
 	{
-		word multiplayer_flags = *(word *)multiplayer_properties;
-		constexpr const word k_climbable_bit = 12U;
+		void *object_definition = tag_get('obje', *(long *)object_datum);
 
-		if ((multiplayer_flags & (1U << k_climbable_bit)) != 0)
+		if (object_definition)
 		{
-			return true;
+			s_tag_block *multiplayer_object_block = (s_tag_block *)((char *)object_definition + 0xEC);
+			void *multiplayer_object_definition = tag_block_get_element_with_size(multiplayer_object_block, 0, 0xC4);
+
+			if (multiplayer_object_definition)
+			{
+				word multiplayer_flags = *(word *)((char *)multiplayer_object_definition + 0x4);
+				constexpr const word k_climbable_bit = 12U;
+
+				if ((multiplayer_flags & (1U << k_climbable_bit)) != 0)
+				{
+					return true;
+				}
+			}
 		}
 	}
 

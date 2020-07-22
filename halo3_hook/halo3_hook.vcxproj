@@ -70,7 +70,7 @@
       <FloatingPointExceptions>false</FloatingPointExceptions>
       <EnforceTypeConversionRules>true</EnforceTypeConversionRules>
       <RuntimeTypeInfo>false</RuntimeTypeInfo>
-      <DisableSpecificWarnings>4201;4514;4577;4706;4710;4820;5045;26812;%(DisableSpecificWarnings)</DisableSpecificWarnings>
+      <DisableSpecificWarnings>4201;4514;4577;4706;4710;4820;5045;6011;26812;%(DisableSpecificWarnings)</DisableSpecificWarnings>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -97,7 +97,7 @@
       <FloatingPointExceptions>false</FloatingPointExceptions>
       <EnforceTypeConversionRules>true</EnforceTypeConversionRules>
       <RuntimeTypeInfo>false</RuntimeTypeInfo>
-      <DisableSpecificWarnings>4201;4514;4577;4706;4710;4820;5045;26812;%(DisableSpecificWarnings)</DisableSpecificWarnings>
+      <DisableSpecificWarnings>4201;4514;4577;4706;4710;4820;5045;6011;26812;%(DisableSpecificWarnings)</DisableSpecificWarnings>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -111,6 +111,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="source\cache\cache_files.cpp" />
+    <ClCompile Include="source\cache\physical_memory_map.cpp" />
     <ClCompile Include="source\effects\screen_effects.cpp" />
     <ClCompile Include="source\game\game.cpp" />
     <ClCompile Include="source\game\game_engine_sandbox.cpp" />
@@ -129,9 +130,11 @@
     <ClCompile Include="source\scenario\scenario_map_variant.cpp" />
     <ClCompile Include="source\scenario\scenario_soft_ceilings.cpp" />
     <ClCompile Include="source\simulation\simulation_history.cpp" />
+    <ClCompile Include="source\tag_files\tag_groups.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="source\cache\cache_files.h" />
+    <ClInclude Include="source\cache\physical_memory_map.h" />
     <ClInclude Include="source\cseries\cseries.h" />
     <ClInclude Include="source\effects\screen_effects.h" />
     <ClInclude Include="source\game\game.h" />
@@ -155,6 +158,8 @@
     <ClInclude Include="source\scenario\scenario_soft_ceilings.h" />
     <ClInclude Include="source\simulation\simulation_history.h" />
     <ClInclude Include="source\tag_files\string_ids.h" />
+    <ClInclude Include="source\tag_files\tag_groups.h" />
+    <ClInclude Include="source\tag_files\tag_group_access.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="cpp.hint" />

@@ -20,7 +20,7 @@ static decltype(input_update) *input_update__original = nullptr;
 
 void input_hooks_initialize()
 {
-	input_update__original = main_get_from_module_offset<decltype(input_update__original)>(0x255360);
+	input_update__original = main_get_module_pointer_at_offset<decltype(input_update__original)>(0x255360);
 
 	DetourAttach((PVOID *)&input_update__original, input_update);
 }
@@ -32,12 +32,12 @@ void input_hooks_dispose()
 
 byte __fastcall input_key_frames_down(short key_code)
 {
-	return main_get_from_module_offset<decltype(&input_key_frames_down)>(0x254B20)(key_code);
+	return main_get_module_pointer_at_offset<decltype(&input_key_frames_down)>(0x254B20)(key_code);
 }
 
 byte __fastcall input_mouse_button_frames_down(short button_index)
 {
-	return main_get_from_module_offset<decltype(&input_mouse_button_frames_down)>(0x254CD0)(button_index);
+	return main_get_module_pointer_at_offset<decltype(&input_mouse_button_frames_down)>(0x254CD0)(button_index);
 }
 
 bool input_update()

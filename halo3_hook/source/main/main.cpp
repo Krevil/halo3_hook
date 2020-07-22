@@ -93,7 +93,7 @@ void *main_get_tls_address()
 {
 	assert(main_initialized());
 
-	__int64 tls_index = *main_get_from_module_offset<long *>(0x9F219C);
+	__int64 tls_index = *main_get_module_pointer_at_offset<long *>(0x9F219C);
 
 	return *(void **)(__readgsqword(0x58u) + (8 * tls_index));
 }

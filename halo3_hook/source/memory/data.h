@@ -50,3 +50,4 @@ struct s_data_iterator
 /* ---------- prototypes/data.cpp */
 
 long data_next_index(s_data_array *data, long index);
+void *datum_try_and_get(const s_data_array *data, long index);

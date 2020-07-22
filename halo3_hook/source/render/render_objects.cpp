@@ -19,7 +19,7 @@ static decltype(render_objects_prepare_for_window) *render_objects_prepare_for_w
 
 void render_object_hooks_initialize()
 {
-	render_objects_prepare_for_window__original = main_get_from_module_offset<decltype(render_objects_prepare_for_window__original)>(0x472000);
+	render_objects_prepare_for_window__original = main_get_module_pointer_at_offset<decltype(render_objects_prepare_for_window__original)>(0x472000);
 
 	DetourAttach((PVOID *)&render_objects_prepare_for_window__original, render_objects_prepare_for_window);
 }
@@ -47,7 +47,7 @@ void __fastcall render_objects_prepare_for_window(long user_index)
 
 	if (!g_render_objects_motion_blur_enabled)
 	{
-		bool *g_motion_blur_enabled = main_get_from_module_offset<bool *>(0x8FD910);
+		bool *g_motion_blur_enabled = main_get_module_pointer_at_offset<bool *>(0x8FD910);
 
 		*g_motion_blur_enabled = false;
 	}

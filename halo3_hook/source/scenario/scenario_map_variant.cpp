@@ -6,5 +6,5 @@
 
 void *__fastcall game_engine_get_runtime_map_variant()
 {
-    return main_get_from_module_offset<decltype(&game_engine_get_runtime_map_variant)>(0x269570)();
+    return main_get_module_pointer_at_offset<decltype(&game_engine_get_runtime_map_variant)>(0x269570)();
 }
