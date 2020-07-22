@@ -2,9 +2,9 @@
 This project is a DLL wrapper for Halo 3 in the Master Chief Collection on PC. The DLL wrapper contains a collection of patches which are used to either fix bugs or extend the functionality of the game with new features.
 
 # Special Thanks
-This project would not be possible without the innovations made by the various people who contributed to ElDewrito, OpenSauce and Project Cartographer. While there are too many to list here, all the people from throughout the years who have provided pre-release builds of Halo, source code, user-made tools, laboriously-procured research and troubleshooting help to the community have all helped directly shape the modern state of Halo modding.
+This project would not be possible without the innovations made by the various people who contributed to ElDewrito, OpenSauce and Project Cartographer. While there are too many to list here, all the people from throughout the years who have provided pre-release builds of Halo, source code, user-made tools, laboriously-procured research and troubleshooting help have all helped directly shape the modern state of Halo modding for the community.
 
-Thank you, all of you.
+Thank you, all of you!
 
 # Instructions
 
