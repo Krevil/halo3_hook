@@ -14,7 +14,7 @@ void *tag_get(
         return nullptr;
     }
 
-    s_cache_file_tag_instance *global_tag_instances = *main_get_typed_module_address<s_cache_file_tag_instance **>(0xCB3700);
+    s_cache_file_tag_instance *global_tag_instances = *main_get_typed_module_address<s_cache_file_tag_instance **>(0x9F3CC0);
 
     return physical_memory_get_address_from_virtual_address(global_tag_instances[index & 0xFFFF].base_address);
 }

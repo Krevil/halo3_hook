@@ -27,12 +27,14 @@ void game_hooks_dispose()
 
 bool game_is_authoritative()
 {
-	return main_get_typed_module_address<decltype(&game_is_authoritative)>(0x29D290)();
+	// TODO: requires manual implementation, function has been inlined
+	exit(NONE);
+	return false;
 }
 
 bool game_is_authoritative_playback()
 {
-	return main_get_typed_module_address<decltype(&game_is_authoritative_playback)>(0x29D2C0)();
+	return main_get_typed_module_address<decltype(&game_is_authoritative_playback)>(0x11555C)();
 }
 
 bool game_is_available()

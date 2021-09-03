@@ -114,7 +114,6 @@
     <ClCompile Include="source\cache\physical_memory_map.cpp" />
     <ClCompile Include="source\effects\screen_effects.cpp" />
     <ClCompile Include="source\game\game.cpp" />
-    <ClCompile Include="source\game\game_engine_sandbox.cpp" />
     <ClCompile Include="source\game\players.cpp" />
     <ClCompile Include="source\input\input.cpp" />
     <ClCompile Include="source\interface\chud\chud_messaging.cpp" />
@@ -138,7 +137,6 @@
     <ClInclude Include="source\cseries\cseries.h" />
     <ClInclude Include="source\effects\screen_effects.h" />
     <ClInclude Include="source\game\game.h" />
-    <ClInclude Include="source\game\game_engine_sandbox.h" />
     <ClInclude Include="source\game\game_globals.h" />
     <ClInclude Include="source\game\players.h" />
     <ClInclude Include="source\input\input.h" />

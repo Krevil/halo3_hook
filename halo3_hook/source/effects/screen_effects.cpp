@@ -21,7 +21,7 @@ static decltype(screen_effect_sample) *screen_effect_sample__original = nullptr;
 
 void screen_effect_hooks_initialize()
 {
-	screen_effect_sample__original = main_get_typed_module_address<decltype(screen_effect_sample__original)>(0x377C40);
+	screen_effect_sample__original = main_get_typed_module_address<decltype(screen_effect_sample__original)>(0x1D77A0);
 
 	DetourAttach((PVOID *)&screen_effect_sample__original, screen_effect_sample);
 }
