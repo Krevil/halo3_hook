@@ -52,10 +52,10 @@ enum Halo3_Skulls_Primary
     Blackeye = 0x2,
     Tough_Luck = 0x4,
     Catch = 0x8,
-    Fog = 1 << 0x10,
-    Famine = 1 << 0x20,
-    Thunderstorm = 1 << 0x40,
-    Tilt = 1 << 0x80
+    Fog = 0x10,
+    Famine = 0x20,
+    Thunderstorm = 0x40,
+    Tilt = 0x80
 };
 
 enum Halo3_Skulls_Secondary
